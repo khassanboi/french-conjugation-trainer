@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Conjugueur — French Conjugation Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --cream:#f5efe4;
+  --cream-2:#ede4d3;
+  --paper:#fbf7ef;
+  --ink:#1a1f2e;
+  --ink-soft:#2d3447;
+  --burgundy:#8b2331;
+  --burgundy-deep:#6b1824;
+  --gold:#c89b4a;
+  --gold-soft:#e6c896;
+  --olive:#5a6b3f;
+  --rose:#d4a5a5;
+  --green:#3e7a4f;
+  --amber:#b8860b;
+  --red:#a83232;
+  --line:rgba(26,31,46,.12);
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(200,155,74,.18), transparent 60%),
+    radial-gradient(900px 500px at 110% 10%, rgba(139,35,49,.10), transparent 60%),
+    var(--cream);
+  color:var(--ink);
+  padding:32px 20px 60px;
+  line-height:1.5;
+}
+
+.shell{
+  max-width:1040px;
+  margin:0 auto;
+}
+
+/* ─── HEADER ─────────────────────────── */
+.masthead{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:20px;
+  padding-bottom:18px;
+  margin-bottom:28px;
+  border-bottom:1px solid var(--line);
+}
+.masthead-left{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.brand{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;
+  font-size:2rem;
+  letter-spacing:.5px;
+  color:var(--ink);
+}
+.brand .accent{color:var(--burgundy);font-style:italic}
+.tag{
+  font-size:.72rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  opacity:.7;
+}
+.date{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  opacity:.7;
+}
+
+/* ─── MENU ───────────────────────────── */
+.menu-hero{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:36px;
+  align-items:center;
+  margin-bottom:36px;
+}
+.hero-title{
+  font-family:'Cormorant Garamond',serif;
+  font-weight:500;
+  font-size:clamp(2.4rem,5vw,3.8rem);
+  line-height:1.05;
+  margin:0 0 16px;
+  letter-spacing:-.5px;
+}
+.hero-title em{
+  font-style:italic;
+  color:var(--burgundy);
+}
+.hero-sub{
+  font-size:1.02rem;
+  color:var(--ink-soft);
+  max-width:440px;
+  margin:0;
+}
+.hero-art{
+  position:relative;
+  aspect-ratio:1/1;
+  max-width:320px;
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+}
+.hero-art svg{width:100%;height:100%;display:block}
+
+/* ─── TENSE CARDS ────────────────────── */
+.section-label{
+  font-size:.72rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  opacity:.7;
+  margin:8px 0 14px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.section-label::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:var(--line);
+}
+
+.tense-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:14px;
+  margin-bottom:14px;
+}
+
+.tense-card{
+  position:relative;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:22px 22px 20px;
+  cursor:pointer;
+  text-align:left;
+  font-family:inherit;
+  color:inherit;
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  overflow:hidden;
+}
+.tense-card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg, var(--c1,#fff) 0%, transparent 70%);
+  opacity:.5;
+  pointer-events:none;
+}
+.tense-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 18px 40px -20px rgba(26,31,46,.35);
+  border-color:rgba(26,31,46,.25);
+}
+.tense-card[data-mode="present"]{--c1:#ffe9c2}
+.tense-card[data-mode="passeCompose"]{--c1:#f4cccc}
+.tense-card[data-mode="imparfait"]{--c1:#d9e6c8}
+.tense-card[data-mode="futur"]{--c1:#cfe0f0}
+.tense-card[data-mode="conditionnel"]{--c1:#e6d4ec}
+.tense-card[data-mode="subjonctif"]{--c1:#f0d9c2}
+.tense-card[data-mode="plusQueParfait"]{--c1:#d5c8a8}
+.tense-card[data-mode="futurAnterieur"]{--c1:#c2d4e6}
+.tense-card[data-mode="conditionnelPasse"]{--c1:#d8c5dc}
+.tense-card[data-mode="mixed"]{--c1:#1a1f2e;color:#fbf7ef}
+.tense-card[data-mode="mixed"] .tense-name,
+.tense-card[data-mode="mixed"] .tense-num,
+.tense-card[data-mode="mixed"] .tense-hint{color:#fbf7ef}
+.tense-card[data-mode="mixed"]::before{background:linear-gradient(135deg,#3a2a4a 0%,transparent 70%);opacity:.7}
+
+.tense-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;
+  letter-spacing:.2em;
+  color:var(--ink-soft);
+  opacity:.6;
+}
+.tense-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.85rem;
+  font-weight:600;
+  line-height:1.1;
+  margin:8px 0 6px;
+  position:relative;
+}
+.tense-hint{
+  font-size:.85rem;
+  color:var(--ink-soft);
+  opacity:.75;
+  position:relative;
+}
+
+/* ─── EXERCISE ───────────────────────── */
+.exercise{display:none}
+
+.hud{
+  display:flex;
+  gap:14px;
+  align-items:center;
+  flex-wrap:wrap;
+  margin-bottom:22px;
+}
+.hud-pill{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:8px 16px;
+  font-size:.82rem;
+  font-weight:500;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.hud-pill strong{font-weight:700}
+.hud-pill .dot{
+  width:8px;height:8px;border-radius:50%;background:var(--burgundy);
+  display:inline-block;
+}
+.hud-spacer{flex:1}
+.hud-quit{
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--ink-soft);
+  border-radius:999px;
+  padding:8px 16px;
+  font-size:.82rem;
+  cursor:pointer;
+  font-family:inherit;
+  transition:.2s;
+}
+.hud-quit:hover{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+
+.progress-track{
+  height:4px;
+  background:rgba(26,31,46,.08);
+  border-radius:99px;
+  overflow:hidden;
+  margin-bottom:24px;
+}
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--burgundy),var(--gold));
+  width:0%;
+  transition:width .5s ease;
+}
+
+.stage{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:38px 38px 32px;
+  position:relative;
+  overflow:hidden;
+}
+.stage::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:5px;
+  background:linear-gradient(90deg,var(--burgundy),var(--gold),var(--olive));
+}
+.stage.flip{animation:flipIn .45s ease both}
+@keyframes flipIn{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.stage-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+  margin-bottom:24px;
+  flex-wrap:wrap;
+}
+.tense-now{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--burgundy);
+  font-weight:600;
+}
+.verb-display{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(2.8rem,7vw,4.2rem);
+  font-weight:500;
+  font-style:italic;
+  line-height:1;
+  margin:6px 0 0;
+  color:var(--ink);
+  letter-spacing:-1px;
+}
+.verb-en{
+  font-size:.85rem;
+  color:var(--ink-soft);
+  opacity:.65;
+  margin-top:6px;
+  letter-spacing:.05em;
+}
+.q-counter{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2rem;
+  color:var(--ink-soft);
+  opacity:.4;
+  font-style:italic;
+}
+
+.rows{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin:24px 0 18px;
+}
+.row{
+  display:grid;
+  grid-template-columns:130px 1fr;
+  gap:14px;
+  align-items:start;
+}
+.pronoun-block{padding-top:6px}
+.pronoun{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:1.55rem;
+  font-weight:500;
+  color:var(--ink);
+  line-height:1.1;
+}
+.row-tense{
+  display:inline-block;
+  margin-top:4px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--burgundy);
+  background:rgba(139,35,49,.08);
+  padding:3px 8px;
+  border-radius:6px;
+  font-weight:600;
+}
+.field{position:relative}
+input{
+  width:100%;
+  padding:14px 16px;
+  font-size:1.1rem;
+  font-family:'Cormorant Garamond',serif;
+  font-weight:500;
+  border:1.5px solid var(--line);
+  border-radius:12px;
+  background:var(--cream);
+  color:var(--ink);
+  transition:.2s;
+}
+input:focus{
+  outline:none;
+  border-color:var(--burgundy);
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(139,35,49,.08);
+}
+.result{
+  margin-top:8px;
+  font-size:.88rem;
+  font-weight:500;
+  padding:0;
+  min-height:0;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  opacity:0;
+  transform:translateY(-4px);
+  transition:.25s;
+}
+.result.show{opacity:1;transform:translateY(0)}
+.result .icon{
+  width:18px;height:18px;border-radius:50%;
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:.7rem;color:#fff;flex-shrink:0;
+}
+.result.correct{color:var(--green)}
+.result.correct .icon{background:var(--green)}
+.result.warning{color:var(--amber)}
+.result.warning .icon{background:var(--amber)}
+.result.wrong{color:var(--red)}
+.result.wrong .icon{background:var(--red)}
+.result .correction{
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-weight:600;
+}
+.result .hint{
+  color:var(--ink-soft);
+  opacity:.65;
+  font-weight:400;
+  font-size:.82rem;
+}
+
+/* accent helper */
+.accent-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin:18px 0 8px;
+  padding:10px 12px;
+  background:var(--cream);
+  border:1px dashed var(--line);
+  border-radius:12px;
+}
+.accent-bar .lbl{
+  font-size:.7rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  opacity:.6;
+  align-self:center;
+  margin-right:6px;
+}
+.accent-key{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:6px 12px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;
+  cursor:pointer;
+  transition:.15s;
+  min-width:34px;
+}
+.accent-key:hover{background:var(--gold-soft);border-color:var(--gold)}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:18px;
+}
+.btn-primary{
+  flex:1;
+  background:var(--ink);
+  color:var(--cream);
+  border:none;
+  border-radius:12px;
+  padding:16px;
+  font-size:.95rem;
+  font-weight:600;
+  letter-spacing:.05em;
+  cursor:pointer;
+  font-family:inherit;
+  transition:.2s;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+.btn-primary:hover{background:var(--burgundy)}
+.btn-primary .kbd{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;
+  background:rgba(255,255,255,.15);
+  padding:2px 7px;
+  border-radius:5px;
+  opacity:.85;
+}
+
+.footnote{
+  text-align:center;
+  color:var(--ink-soft);
+  opacity:.6;
+  font-size:.78rem;
+  margin-top:18px;
+  font-style:italic;
+}
+
+/* ─── RESULTS ────────────────────────── */
+.results{
+  display:none;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:48px 32px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.results::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:5px;
+  background:linear-gradient(90deg,var(--burgundy),var(--gold));
+}
+.results-eyebrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--burgundy);
+  margin-bottom:8px;
+}
+.results-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:3rem;
+  font-style:italic;
+  margin:0 0 8px;
+}
+.results-score{
+  font-family:'Cormorant Garamond',serif;
+  font-size:5rem;
+  font-weight:600;
+  line-height:1;
+  margin:18px 0;
+  background:linear-gradient(135deg,var(--burgundy),var(--gold));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+.results-msg{
+  font-size:1.05rem;
+  color:var(--ink-soft);
+  max-width:420px;
+  margin:0 auto 28px;
+}
+.results .btn-primary{max-width:280px;margin:0 auto;display:flex}
+
+/* ─── RESPONSIVE ─────────────────────── */
+@media(max-width:760px){
+  body{padding:20px 14px 40px}
+  .menu-hero{grid-template-columns:1fr;gap:18px}
+  .hero-art{max-width:200px;margin:0 auto}
+  .row{grid-template-columns:1fr;gap:6px}
+  .pronoun{padding-top:0;font-size:1.3rem}
+  .stage{padding:26px 22px}
+  .verb-display{font-size:2.6rem}
+  .q-counter{display:none}
+  .brand{font-size:1.5rem}
+  .date{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+<header class="masthead">
+  <div class="masthead-left">
+    <div class="brand">Le <span class="accent">Conjugueur</span></div>
+    <div class="tag">N° 4 · Édition Révisée</div>
+  </div>
+  <div class="date" id="todayDate"></div>
+</header>
+
+<!-- ─── MENU ─── -->
+<div id="menu">
+
+  <section class="menu-hero">
+    <div>
+      <h1 class="hero-title">Maîtrisez la <em>conjugaison</em> française, un verbe à la fois.</h1>
+      <p class="hero-sub">Ten verbs per round, two pronouns each — always one singular + one plural, from different persons. Mixed mode: four verbs, four pronouns, four different tenses apiece. Accents forgiven, just noted.</p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="92" stroke="#1a1f2e" stroke-width="1" opacity=".25"/>
+        <circle cx="100" cy="100" r="70" stroke="#8b2331" stroke-width="1" opacity=".4"/>
+        <circle cx="100" cy="100" r="48" stroke="#c89b4a" stroke-width="1" opacity=".6"/>
+        <text x="100" y="92" text-anchor="middle" font-family="Cormorant Garamond" font-size="34" font-style="italic" fill="#1a1f2e">être</text>
+        <text x="100" y="120" text-anchor="middle" font-family="Cormorant Garamond" font-size="20" font-style="italic" fill="#8b2331">avoir</text>
+        <text x="100" y="142" text-anchor="middle" font-family="Cormorant Garamond" font-size="14" fill="#1a1f2e" opacity=".5">aller · faire · lire</text>
+      </svg>
+    </div>
+  </section>
+
+  <div class="section-label">Choose a tense</div>
+
+  <div class="tense-grid">
+    <button class="tense-card" data-mode="present" onclick="startGame('present')">
+      <div class="tense-num">01 · INDICATIF</div>
+      <div class="tense-name">Présent</div>
+      <div class="tense-hint">The everyday now — start here.</div>
+    </button>
+    <button class="tense-card" data-mode="passeCompose" onclick="startGame('passeCompose')">
+      <div class="tense-num">02 · INDICATIF</div>
+      <div class="tense-name">Passé Composé</div>
+      <div class="tense-hint">Completed past action.</div>
+    </button>
+    <button class="tense-card" data-mode="imparfait" onclick="startGame('imparfait')">
+      <div class="tense-num">03 · INDICATIF</div>
+      <div class="tense-name">Imparfait</div>
+      <div class="tense-hint">Ongoing or habitual past.</div>
+    </button>
+    <button class="tense-card" data-mode="plusQueParfait" onclick="startGame('plusQueParfait')">
+      <div class="tense-num">04 · INDICATIF</div>
+      <div class="tense-name">Plus-que-parfait</div>
+      <div class="tense-hint">Past before another past.</div>
+    </button>
+    <button class="tense-card" data-mode="futur" onclick="startGame('futur')">
+      <div class="tense-num">05 · INDICATIF</div>
+      <div class="tense-name">Futur</div>
+      <div class="tense-hint">What will come to pass.</div>
+    </button>
+    <button class="tense-card" data-mode="futurAnterieur" onclick="startGame('futurAnterieur')">
+      <div class="tense-num">06 · INDICATIF</div>
+      <div class="tense-name">Futur Antérieur</div>
+      <div class="tense-hint">Will have done — completed future.</div>
+    </button>
+    <button class="tense-card" data-mode="conditionnel" onclick="startGame('conditionnel')">
+      <div class="tense-num">07 · MODE</div>
+      <div class="tense-name">Conditionnel</div>
+      <div class="tense-hint">Would, could, politeness.</div>
+    </button>
+    <button class="tense-card" data-mode="conditionnelPasse" onclick="startGame('conditionnelPasse')">
+      <div class="tense-num">08 · MODE</div>
+      <div class="tense-name">Conditionnel Passé</div>
+      <div class="tense-hint">Would have — past unreal.</div>
+    </button>
+    <button class="tense-card" data-mode="subjonctif" onclick="startGame('subjonctif')">
+      <div class="tense-num">09 · MODE</div>
+      <div class="tense-name">Subjonctif</div>
+      <div class="tense-hint">Doubt, desire, emotion.</div>
+    </button>
+  </div>
+
+  <div class="section-label">Or take the full challenge</div>
+
+  <div class="tense-grid">
+    <button class="tense-card" data-mode="mixed" onclick="startGame('mixed')" style="grid-column:span 2">
+      <div class="tense-num">∞ · ALL TENSES</div>
+      <div class="tense-name">Mixed Drill</div>
+      <div class="tense-hint">4 verbs, 4 pronouns each, every pronoun in a random tense. The real test.</div>
+    </button>
+  </div>
+
+</div>
+
+<!-- ─── EXERCISE ─── -->
+<div class="exercise" id="exercise">
+
+  <div class="hud">
+    <div class="hud-pill"><span class="dot"></span><span id="modeLabel">—</span></div>
+    <div class="hud-pill">Question <strong id="progress">1/15</strong></div>
+    <div class="hud-pill">Score <strong id="score">0</strong></div>
+    <div class="hud-pill">🔥 Streak <strong id="streak">0</strong></div>
+    <div class="hud-spacer"></div>
+    <button class="hud-quit" onclick="restart()">← Menu</button>
+  </div>
+
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="stage" id="stage">
+
+    <div class="stage-header">
+      <div>
+        <div class="tense-now" id="tenseNow">PRÉSENT</div>
+        <div class="verb-display" id="verb">parler</div>
+        <div class="verb-en" id="verbEn">to speak</div>
+      </div>
+      <div class="q-counter" id="qCounter">N° 1</div>
+    </div>
+
+    <div class="rows" id="rows"></div>
+
+    <div class="accent-bar">
+      <span class="lbl">Accents</span>
+      <button type="button" class="accent-key" data-ch="é">é</button>
+      <button type="button" class="accent-key" data-ch="è">è</button>
+      <button type="button" class="accent-key" data-ch="ê">ê</button>
+      <button type="button" class="accent-key" data-ch="ë">ë</button>
+      <button type="button" class="accent-key" data-ch="à">à</button>
+      <button type="button" class="accent-key" data-ch="â">â</button>
+      <button type="button" class="accent-key" data-ch="î">î</button>
+      <button type="button" class="accent-key" data-ch="ï">ï</button>
+      <button type="button" class="accent-key" data-ch="ô">ô</button>
+      <button type="button" class="accent-key" data-ch="ù">ù</button>
+      <button type="button" class="accent-key" data-ch="û">û</button>
+      <button type="button" class="accent-key" data-ch="ç">ç</button>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" onclick="checkAnswers()">
+        Check Answers <span class="kbd">⏎ Enter</span>
+      </button>
+    </div>
+
+    <div class="footnote">Correct every mistake before the next verb. Missing accents are accepted but noted.</div>
+
+  </div>
+
+  <div class="results" id="results">
+    <div class="results-eyebrow">— Fin de la partie —</div>
+    <h2 class="results-title">C'est fini.</h2>
+    <div class="results-score" id="finalScore">0/15</div>
+    <p class="results-msg" id="finalMsg"></p>
+    <button class="btn-primary" onclick="restart()">Return to the Menu</button>
+  </div>
+
+</div>
+
+</div>
+
+<script>
+const pronouns = ['je','tu','il','elle','nous','vous','ils','elles'];
+
+// person (1/2/3) and number (s/p) for each pronoun
+const pronounMeta = {
+  je:   {person:1, number:'s'},
+  tu:   {person:2, number:'s'},
+  il:   {person:3, number:'s'},
+  elle: {person:3, number:'s'},
+  nous: {person:1, number:'p'},
+  vous: {person:2, number:'p'},
+  ils:  {person:3, number:'p'},
+  elles:{person:3, number:'p'}
+};
+const singularsByPerson = {1:['je'], 2:['tu'], 3:['il','elle']};
+const pluralsByPerson   = {1:['nous'], 2:['vous'], 3:['ils','elles']};
+
+// pick a pair: one singular + one plural, from different persons
+function pickDiversePair(){
+  const sPersons = shuffle([1,2,3]);
+  const sPerson = sPersons[0];
+  const pPerson = shuffle([1,2,3].filter(p => p !== sPerson))[0];
+  return shuffle([
+    random(singularsByPerson[sPerson]),
+    random(pluralsByPerson[pPerson])
+  ]);
+}
+
+// pick 4 distinct pronouns: 2 singulars from 2 different persons + 2 plurals from 2 different persons
+function pickDiverseQuad(){
+  const [sP1,sP2] = shuffle([1,2,3]).slice(0,2);
+  const [pP1,pP2] = shuffle([1,2,3]).slice(0,2);
+  return shuffle([
+    random(singularsByPerson[sP1]),
+    random(singularsByPerson[sP2]),
+    random(pluralsByPerson[pP1]),
+    random(pluralsByPerson[pP2])
+  ]);
+}
+
+const tenseNames = {
+  present:'Présent',
+  passeCompose:'Passé Composé',
+  imparfait:'Imparfait',
+  plusQueParfait:'Plus-que-parfait',
+  futur:'Futur',
+  futurAnterieur:'Futur Antérieur',
+  conditionnel:'Conditionnel',
+  conditionnelPasse:'Conditionnel Passé',
+  subjonctif:'Subjonctif'
+};
+
+const ALL_TENSES = ['present','passeCompose','imparfait','plusQueParfait','futur','futurAnterieur','conditionnel','conditionnelPasse','subjonctif'];
+
+const verbMeanings = {
+  parler:'to speak',
+  finir:'to finish',
+  être:'to be',
+  avoir:'to have',
+  aller:'to go',
+  faire:'to do / make',
+  savoir:'to know',
+  écrire:'to write',
+  lire:'to read'
+};
+
+const data = {
+  parler:{
+    present:['parle','parles','parle','parle','parlons','parlez','parlent','parlent'],
+    passeCompose:['ai parlé','as parlé','a parlé','a parlé','avons parlé','avez parlé','ont parlé','ont parlé'],
+    imparfait:['parlais','parlais','parlait','parlait','parlions','parliez','parlaient','parlaient'],
+    futur:['parlerai','parleras','parlera','parlera','parlerons','parlerez','parleront','parleront'],
+    conditionnel:['parlerais','parlerais','parlerait','parlerait','parlerions','parleriez','parleraient','parleraient'],
+    subjonctif:['parle','parles','parle','parle','parlions','parliez','parlent','parlent'],
+    plusQueParfait:['avais parlé','avais parlé','avait parlé','avait parlé','avions parlé','aviez parlé','avaient parlé','avaient parlé'],
+    futurAnterieur:['aurai parlé','auras parlé','aura parlé','aura parlé','aurons parlé','aurez parlé','auront parlé','auront parlé'],
+    conditionnelPasse:['aurais parlé','aurais parlé','aurait parlé','aurait parlé','aurions parlé','auriez parlé','auraient parlé','auraient parlé']
+  },
+  finir:{
+    present:['finis','finis','finit','finit','finissons','finissez','finissent','finissent'],
+    passeCompose:['ai fini','as fini','a fini','a fini','avons fini','avez fini','ont fini','ont fini'],
+    imparfait:['finissais','finissais','finissait','finissait','finissions','finissiez','finissaient','finissaient'],
+    futur:['finirai','finiras','finira','finira','finirons','finirez','finiront','finiront'],
+    conditionnel:['finirais','finirais','finirait','finirait','finirions','finiriez','finiraient','finiraient'],
+    subjonctif:['finisse','finisses','finisse','finisse','finissions','finissiez','finissent','finissent'],
+    plusQueParfait:['avais fini','avais fini','avait fini','avait fini','avions fini','aviez fini','avaient fini','avaient fini'],
+    futurAnterieur:['aurai fini','auras fini','aura fini','aura fini','aurons fini','aurez fini','auront fini','auront fini'],
+    conditionnelPasse:['aurais fini','aurais fini','aurait fini','aurait fini','aurions fini','auriez fini','auraient fini','auraient fini']
+  },
+  être:{
+    present:['suis','es','est','est','sommes','êtes','sont','sont'],
+    passeCompose:['ai été','as été','a été','a été','avons été','avez été','ont été','ont été'],
+    imparfait:['étais','étais','était','était','étions','étiez','étaient','étaient'],
+    futur:['serai','seras','sera','sera','serons','serez','seront','seront'],
+    conditionnel:['serais','serais','serait','serait','serions','seriez','seraient','seraient'],
+    subjonctif:['sois','sois','soit','soit','soyons','soyez','soient','soient'],
+    plusQueParfait:['avais été','avais été','avait été','avait été','avions été','aviez été','avaient été','avaient été'],
+    futurAnterieur:['aurai été','auras été','aura été','aura été','aurons été','aurez été','auront été','auront été'],
+    conditionnelPasse:['aurais été','aurais été','aurait été','aurait été','aurions été','auriez été','auraient été','auraient été']
+  },
+  avoir:{
+    present:['ai','as','a','a','avons','avez','ont','ont'],
+    passeCompose:['ai eu','as eu','a eu','a eu','avons eu','avez eu','ont eu','ont eu'],
+    imparfait:['avais','avais','avait','avait','avions','aviez','avaient','avaient'],
+    futur:['aurai','auras','aura','aura','aurons','aurez','auront','auront'],
+    conditionnel:['aurais','aurais','aurait','aurait','aurions','auriez','auraient','auraient'],
+    subjonctif:['aie','aies','ait','ait','ayons','ayez','aient','aient'],
+    plusQueParfait:['avais eu','avais eu','avait eu','avait eu','avions eu','aviez eu','avaient eu','avaient eu'],
+    futurAnterieur:['aurai eu','auras eu','aura eu','aura eu','aurons eu','aurez eu','auront eu','auront eu'],
+    conditionnelPasse:['aurais eu','aurais eu','aurait eu','aurait eu','aurions eu','auriez eu','auraient eu','auraient eu']
+  },
+  aller:{
+    present:['vais','vas','va','va','allons','allez','vont','vont'],
+    passeCompose:['suis allé|suis allée','es allé|es allée','est allé','est allée','sommes allés|sommes allées','êtes allés|êtes allées|êtes allé|êtes allée','sont allés','sont allées'],
+    imparfait:['allais','allais','allait','allait','allions','alliez','allaient','allaient'],
+    futur:['irai','iras','ira','ira','irons','irez','iront','iront'],
+    conditionnel:['irais','irais','irait','irait','irions','iriez','iraient','iraient'],
+    subjonctif:['aille','ailles','aille','aille','allions','alliez','aillent','aillent'],
+    plusQueParfait:['étais allé|étais allée','étais allé|étais allée','était allé','était allée','étions allés|étions allées','étiez allés|étiez allées|étiez allé|étiez allée','étaient allés','étaient allées'],
+    futurAnterieur:['serai allé|serai allée','seras allé|seras allée','sera allé','sera allée','serons allés|serons allées','serez allés|serez allées|serez allé|serez allée','seront allés','seront allées'],
+    conditionnelPasse:['serais allé|serais allée','serais allé|serais allée','serait allé','serait allée','serions allés|serions allées','seriez allés|seriez allées|seriez allé|seriez allée','seraient allés','seraient allées']
+  },
+  faire:{
+    present:['fais','fais','fait','fait','faisons','faites','font','font'],
+    passeCompose:['ai fait','as fait','a fait','a fait','avons fait','avez fait','ont fait','ont fait'],
+    imparfait:['faisais','faisais','faisait','faisait','faisions','faisiez','faisaient','faisaient'],
+    futur:['ferai','feras','fera','fera','ferons','ferez','feront','feront'],
+    conditionnel:['ferais','ferais','ferait','ferait','ferions','feriez','feraient','feraient'],
+    subjonctif:['fasse','fasses','fasse','fasse','fassions','fassiez','fassent','fassent'],
+    plusQueParfait:['avais fait','avais fait','avait fait','avait fait','avions fait','aviez fait','avaient fait','avaient fait'],
+    futurAnterieur:['aurai fait','auras fait','aura fait','aura fait','aurons fait','aurez fait','auront fait','auront fait'],
+    conditionnelPasse:['aurais fait','aurais fait','aurait fait','aurait fait','aurions fait','auriez fait','auraient fait','auraient fait']
+  },
+  savoir:{
+    present:['sais','sais','sait','sait','savons','savez','savent','savent'],
+    passeCompose:['ai su','as su','a su','a su','avons su','avez su','ont su','ont su'],
+    imparfait:['savais','savais','savait','savait','savions','saviez','savaient','savaient'],
+    futur:['saurai','sauras','saura','saura','saurons','saurez','sauront','sauront'],
+    conditionnel:['saurais','saurais','saurait','saurait','saurions','sauriez','sauraient','sauraient'],
+    subjonctif:['sache','saches','sache','sache','sachions','sachiez','sachent','sachent'],
+    plusQueParfait:['avais su','avais su','avait su','avait su','avions su','aviez su','avaient su','avaient su'],
+    futurAnterieur:['aurai su','auras su','aura su','aura su','aurons su','aurez su','auront su','auront su'],
+    conditionnelPasse:['aurais su','aurais su','aurait su','aurait su','aurions su','auriez su','auraient su','auraient su']
+  },
+  écrire:{
+    present:['écris','écris','écrit','écrit','écrivons','écrivez','écrivent','écrivent'],
+    passeCompose:['ai écrit','as écrit','a écrit','a écrit','avons écrit','avez écrit','ont écrit','ont écrit'],
+    imparfait:['écrivais','écrivais','écrivait','écrivait','écrivions','écriviez','écrivaient','écrivaient'],
+    futur:['écrirai','écriras','écrira','écrira','écrirons','écrirez','écriront','écriront'],
+    conditionnel:['écrirais','écrirais','écrirait','écrirait','écririons','écririez','écriraient','écriraient'],
+    subjonctif:['écrive','écrives','écrive','écrive','écrivions','écriviez','écrivent','écrivent'],
+    plusQueParfait:['avais écrit','avais écrit','avait écrit','avait écrit','avions écrit','aviez écrit','avaient écrit','avaient écrit'],
+    futurAnterieur:['aurai écrit','auras écrit','aura écrit','aura écrit','aurons écrit','aurez écrit','auront écrit','auront écrit'],
+    conditionnelPasse:['aurais écrit','aurais écrit','aurait écrit','aurait écrit','aurions écrit','auriez écrit','auraient écrit','auraient écrit']
+  },
+  lire:{
+    present:['lis','lis','lit','lit','lisons','lisez','lisent','lisent'],
+    passeCompose:['ai lu','as lu','a lu','a lu','avons lu','avez lu','ont lu','ont lu'],
+    imparfait:['lisais','lisais','lisait','lisait','lisions','lisiez','lisaient','lisaient'],
+    futur:['lirai','liras','lira','lira','lirons','lirez','liront','liront'],
+    conditionnel:['lirais','lirais','lirait','lirait','lirions','liriez','liraient','liraient'],
+    subjonctif:['lise','lises','lise','lise','lisions','lisiez','lisent','lisent'],
+    plusQueParfait:['avais lu','avais lu','avait lu','avait lu','avions lu','aviez lu','avaient lu','avaient lu'],
+    futurAnterieur:['aurai lu','auras lu','aura lu','aura lu','aurons lu','aurez lu','auront lu','auront lu'],
+    conditionnelPasse:['aurais lu','aurais lu','aurait lu','aurait lu','aurions lu','auriez lu','auraient lu','auraient lu']
+  }
+};
+
+const verbs = Object.keys(data);
+
+let questions = [];
+let current = 0;
+let score = 0;
+let streak = 0;
+let bestStreak = 0;
+
+function normalize(text){
+  return text.toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g,'')
+    .replace(/'/g,' ')
+    .trim();
+}
+function random(arr){return arr[Math.floor(Math.random()*arr.length)]}
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5)}
+
+function setDate(){
+  const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const d=new Date();
+  document.getElementById('todayDate').textContent=`Paris · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+setDate();
+
+function startGame(mode){
+  questions=[];current=0;score=0;streak=0;bestStreak=0;
+
+  const isMixed = mode === 'mixed';
+  const verbCount = isMixed ? 4 : 10;
+
+  // distinct verbs; sample with replacement only if data has fewer than verbCount
+  const pool = shuffle(verbs);
+  const chosenVerbs = [];
+  for(let i=0;i<verbCount;i++) chosenVerbs.push(pool[i % pool.length]);
+
+  shuffle(chosenVerbs).forEach(v=>{
+    const chosenPronouns = isMixed ? pickDiverseQuad() : pickDiversePair();
+    const chosenTenses = isMixed
+      ? chosenPronouns.map(()=>random(ALL_TENSES))
+      : chosenPronouns.map(()=>mode);
+    questions.push({verb:v, pronouns:chosenPronouns, tenses:chosenTenses, isMixed});
+  });
+
+  document.getElementById('menu').style.display='none';
+  document.getElementById('exercise').style.display='block';
+  document.getElementById('results').style.display='none';
+  document.querySelector('.stage').style.display='block';
+  loadQuestion();
+}
+
+function loadQuestion(){
+  const q = questions[current];
+  const headerLabel = q.isMixed ? 'Mixed' : tenseNames[q.tenses[0]];
+  document.getElementById('modeLabel').textContent = headerLabel;
+  document.getElementById('tenseNow').textContent = headerLabel.toUpperCase();
+  document.getElementById('progress').textContent = `${current+1}/${questions.length}`;
+  document.getElementById('score').textContent = score;
+  document.getElementById('streak').textContent = streak;
+  document.getElementById('verb').textContent = q.verb;
+  document.getElementById('verbEn').textContent = verbMeanings[q.verb] || '';
+  document.getElementById('qCounter').textContent = `N° ${current+1}`;
+  document.getElementById('progressFill').style.width = `${(current/questions.length)*100}%`;
+
+  const rows = document.getElementById('rows');
+  rows.innerHTML='';
+  q.pronouns.forEach((p,index)=>{
+    const tenseTag = q.isMixed
+      ? `<div class="row-tense">${tenseNames[q.tenses[index]]}</div>`
+      : '';
+    rows.innerHTML += `
+      <div class="row">
+        <div class="pronoun-block">
+          <div class="pronoun">${p}</div>
+          ${tenseTag}
+        </div>
+        <div class="field">
+          <input id="input${index}" autocomplete="off" spellcheck="false" placeholder="…">
+          <div class="result" id="result${index}"></div>
+        </div>
+      </div>
+    `;
+  });
+
+  const stage = document.getElementById('stage');
+  stage.classList.remove('flip');
+  void stage.offsetWidth;
+  stage.classList.add('flip');
+
+  setTimeout(()=>document.getElementById('input0').focus(),60);
+}
+
+function checkAnswers(){
+  const q = questions[current];
+  let allCorrect = true;
+
+  q.pronouns.forEach((p,index)=>{
+    const raw = data[q.verb][q.tenses[index]][pronouns.indexOf(p)];
+    const alts = raw.split('|');
+    const canonical = alts[0];
+    const user = document.getElementById(`input${index}`).value.trim();
+    const result = document.getElementById(`result${index}`);
+    result.classList.add('show');
+
+    const userN = normalize(user);
+    const exactMatch = alts.some(a => a === user);
+    const looseMatch = alts.some(a => normalize(a) === userN);
+
+    if(exactMatch){
+      result.className='result correct show';
+      result.innerHTML=`<span class="icon">✓</span><span>Parfait.</span>`;
+    }else if(looseMatch){
+      // matched ignoring accents — count as correct, soft note in grey
+      const matched = alts.find(a => normalize(a) === userN);
+      result.className='result correct show';
+      result.innerHTML=`<span class="icon">✓</span><span>Correct <span class="hint">— accent: <span class="correction">${matched}</span></span></span>`;
+    }else{
+      allCorrect = false;
+      result.className='result wrong show';
+      result.innerHTML=`<span class="icon">✕</span><span>Correct answer — <span class="correction">${canonical}</span></span>`;
+    }
+  });
+
+  if(allCorrect){
+    score++;
+    streak++;
+    if(streak>bestStreak) bestStreak=streak;
+    document.getElementById('score').textContent = score;
+    document.getElementById('streak').textContent = streak;
+
+    setTimeout(()=>{
+      current++;
+      if(current >= questions.length){finish()}
+      else{loadQuestion()}
+    },900);
+  }else{
+    streak = 0;
+    document.getElementById('streak').textContent = streak;
+  }
+}
+
+function finish(){
+  document.querySelector('.stage').style.display='none';
+  document.getElementById('results').style.display='block';
+  document.getElementById('progressFill').style.width='100%';
+  document.getElementById('finalScore').textContent = `${score}/${questions.length}`;
+
+  let msg;
+  const pct = score/questions.length;
+  if(pct===1) msg = `Magnifique. A flawless run — Académie française would approve. Best streak: ${bestStreak}.`;
+  else if(pct>=.8) msg = `Très bien. You moved through the conjugations with grace. Best streak: ${bestStreak}.`;
+  else if(pct>=.5) msg = `Pas mal. The trickier verbs revealed themselves — review and run it again. Best streak: ${bestStreak}.`;
+  else msg = `Courage. Every conjugation drilled is one earned. Try the same tense once more. Best streak: ${bestStreak}.`;
+  document.getElementById('finalMsg').textContent = msg;
+}
+
+function restart(){
+  document.getElementById('exercise').style.display='none';
+  document.getElementById('menu').style.display='block';
+  document.getElementById('results').style.display='none';
+  document.querySelector('.stage').style.display='block';
+}
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter' && document.getElementById('exercise').style.display==='block'){
+    checkAnswers();
+  }
+});
+
+// accent helper
+document.addEventListener('click',e=>{
+  const k = e.target.closest('.accent-key');
+  if(!k) return;
+  const ch = k.dataset.ch;
+  const active = document.activeElement;
+  if(active && active.tagName==='INPUT'){
+    const start=active.selectionStart, end=active.selectionEnd;
+    active.value = active.value.slice(0,start) + ch + active.value.slice(end);
+    active.selectionStart = active.selectionEnd = start+1;
+    active.focus();
+  }
+});
+</script>
+
+</body>
+</html>
