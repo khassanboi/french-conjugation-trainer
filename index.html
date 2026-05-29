@@ -155,7 +155,7 @@ body{
 /* ─── FAMILY GROUPING ────────────────── */
 .fam-row{
   display:grid;
-  grid-template-columns:repeat(var(--cols,3),1fr);
+  grid-template-columns:repeat(3,1fr); /* always 3 cols — cards stay identical size */
   gap:14px;
   margin-bottom:8px;
 }
@@ -245,30 +245,22 @@ body{
 .tense-card[data-mode="conditionnelPasse"]{--c1:#b890c8; --stripe:#542670}  /* dark   */
 .tense-card[data-mode="subjonctif"]       {--c1:#f5d878; --stripe:#c89018}
 .tense-card[data-mode="mixed"]{
-  background:#16192a;
-  color:#fbf7ef;
-  border-color:rgba(251,247,239,.18);
-  --stripe:linear-gradient(90deg,#5b9438 0%,#c89018 25%,#b02828 50%,#23446e 75%,#542670 100%);
+  /* Same paper base as other cards — only the blob and stripe carry the rainbow */
+  --stripe:linear-gradient(90deg,#5b9438 0%,#c89018 22%,#b02828 50%,#23446e 76%,#542670 100%);
 }
 .tense-card[data-mode="mixed"]::after{background:var(--stripe)}
-.tense-card[data-mode="mixed"] .tense-name,
-.tense-card[data-mode="mixed"] .tense-num,
-.tense-card[data-mode="mixed"] .tense-hint{color:#fbf7ef;position:relative;z-index:1}
 .tense-card[data-mode="mixed"]::before{
-  /* Aurora of all five tense-family colors, blended onto an ink base */
-  background:
-    radial-gradient(circle at  8% 18%, rgba(188,220,160,.62), transparent 42%),  /* green  · present */
-    radial-gradient(circle at 92% 14%, rgba(245,216,120,.58), transparent 42%),  /* yellow · subjunctive */
-    radial-gradient(circle at 96% 88%, rgba(136,168,200,.60), transparent 44%),  /* blue   · future */
-    radial-gradient(circle at  6% 90%, rgba(216,128,128,.62), transparent 44%),  /* red    · past */
-    radial-gradient(circle at 52% 55%, rgba(173,136,188,.45), transparent 55%);  /* mauve  · conditional */
-  mix-blend-mode:screen;
-  opacity:1;
-  filter:saturate(1.1);
-}
-.tense-card[data-mode="mixed"]:hover{
-  box-shadow:0 18px 50px -18px rgba(173,136,188,.55), 0 0 0 1px rgba(251,247,239,.25);
-  border-color:rgba(251,247,239,.3);
+  /* Multi-color wash matching every family's top-left gradient pattern, fading to transparent */
+  background:linear-gradient(135deg,
+    #bcdca0 0%,    /* green  · present */
+    #f5d878 18%,   /* yellow · subjunctive */
+    #f2c4c4 36%,   /* red    · past */
+    #cfdff0 56%,   /* blue   · future */
+    #e0c8e8 72%,   /* mauve  · conditional */
+    transparent 90%);
+  opacity:.6;
+  mix-blend-mode:normal;
+  filter:none;
 }
 
 .tense-num{
@@ -788,7 +780,7 @@ input:focus{
 
   <div class="section-label"><span class="lbl-orn">§</span> Today's Drills · Choose a Tense</div>
 
-  <div class="fam-row" style="--cols:1">
+  <div class="fam-row">
     <div class="fam-label" style="--accent:#5b9438">Present</div>
     <button class="tense-card" data-mode="present" onclick="startGame('present')">
       <div class="tense-num">PRESENT</div>
@@ -797,7 +789,7 @@ input:focus{
     </button>
   </div>
 
-  <div class="fam-row" style="--cols:3">
+  <div class="fam-row">
     <div class="fam-label" style="--accent:#b02828">Past · light → mid → dark</div>
     <button class="tense-card" data-mode="passeCompose" onclick="startGame('passeCompose')">
       <div class="tense-num">PAST · RECENT</div>
@@ -816,7 +808,7 @@ input:focus{
     </button>
   </div>
 
-  <div class="fam-row" style="--cols:2">
+  <div class="fam-row">
     <div class="fam-label" style="--accent:#23446e">Future</div>
     <button class="tense-card" data-mode="futur" onclick="startGame('futur')">
       <div class="tense-num">FUTURE · SIMPLE</div>
@@ -830,7 +822,7 @@ input:focus{
     </button>
   </div>
 
-  <div class="fam-row" style="--cols:2">
+  <div class="fam-row">
     <div class="fam-label" style="--accent:#542670">Conditional</div>
     <button class="tense-card" data-mode="conditionnel" onclick="startGame('conditionnel')">
       <div class="tense-num">CONDITIONAL · PRESENT</div>
@@ -844,7 +836,7 @@ input:focus{
     </button>
   </div>
 
-  <div class="fam-row" style="--cols:1">
+  <div class="fam-row">
     <div class="fam-label" style="--accent:#c89018">Subjunctive</div>
     <button class="tense-card" data-mode="subjonctif" onclick="startGame('subjonctif')">
       <div class="tense-num">SUBJUNCTIVE</div>
@@ -1336,10 +1328,9 @@ const Sound = (() => {
     if(on){
       ensure(); if(!ctx) return;
       if(ctx.state === 'suspended') ctx.resume();
-      // fade in
+      // No fade-in — set to full volume immediately
       musicGain.gain.cancelScheduledValues(ctx.currentTime);
-      musicGain.gain.setValueAtTime(0.0001, ctx.currentTime);
-      musicGain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime+1.2);
+      musicGain.gain.setValueAtTime(0.18, ctx.currentTime);
       if(!musicTimer) playChord();
     }else{
       if(ctx){
