@@ -1,0 +1,25 @@
+{
+  "name": "french-conjugation-trainer",
+  "version": "1.0.0",
+  "description": "A Parisian-chic, single-file French verb conjugation trainer.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khassanboi/french-conjugation-trainer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/khassanboi/french-conjugation-trainer/issues"
+  },
+  "homepage": "https://github.com/khassanboi/french-conjugation-trainer#readme",
+  "dependencies": {
+    "french-verbs": "^5.4.0",
+    "french-verbs-lefff": "^3.4.0"
+  }
+}

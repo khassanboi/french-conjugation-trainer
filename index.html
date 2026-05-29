@@ -717,6 +717,7 @@ input:focus{
 
 </div>
 
+<script src="data.generated.js"></script>
 <script>
 const pronouns = ['je','tu','il','elle','nous','vous','ils','elles'];
 
@@ -771,120 +772,9 @@ const tenseNames = {
 
 const ALL_TENSES = ['present','passeCompose','imparfait','plusQueParfait','futur','futurAnterieur','conditionnel','conditionnelPasse','subjonctif'];
 
-const verbMeanings = {
-  parler:'to speak',
-  finir:'to finish',
-  être:'to be',
-  avoir:'to have',
-  aller:'to go',
-  faire:'to do / make',
-  savoir:'to know',
-  écrire:'to write',
-  lire:'to read'
-};
-
-const data = {
-  parler:{
-    present:['parle','parles','parle','parle','parlons','parlez','parlent','parlent'],
-    passeCompose:['ai parlé','as parlé','a parlé','a parlé','avons parlé','avez parlé','ont parlé','ont parlé'],
-    imparfait:['parlais','parlais','parlait','parlait','parlions','parliez','parlaient','parlaient'],
-    futur:['parlerai','parleras','parlera','parlera','parlerons','parlerez','parleront','parleront'],
-    conditionnel:['parlerais','parlerais','parlerait','parlerait','parlerions','parleriez','parleraient','parleraient'],
-    subjonctif:['parle','parles','parle','parle','parlions','parliez','parlent','parlent'],
-    plusQueParfait:['avais parlé','avais parlé','avait parlé','avait parlé','avions parlé','aviez parlé','avaient parlé','avaient parlé'],
-    futurAnterieur:['aurai parlé','auras parlé','aura parlé','aura parlé','aurons parlé','aurez parlé','auront parlé','auront parlé'],
-    conditionnelPasse:['aurais parlé','aurais parlé','aurait parlé','aurait parlé','aurions parlé','auriez parlé','auraient parlé','auraient parlé']
-  },
-  finir:{
-    present:['finis','finis','finit','finit','finissons','finissez','finissent','finissent'],
-    passeCompose:['ai fini','as fini','a fini','a fini','avons fini','avez fini','ont fini','ont fini'],
-    imparfait:['finissais','finissais','finissait','finissait','finissions','finissiez','finissaient','finissaient'],
-    futur:['finirai','finiras','finira','finira','finirons','finirez','finiront','finiront'],
-    conditionnel:['finirais','finirais','finirait','finirait','finirions','finiriez','finiraient','finiraient'],
-    subjonctif:['finisse','finisses','finisse','finisse','finissions','finissiez','finissent','finissent'],
-    plusQueParfait:['avais fini','avais fini','avait fini','avait fini','avions fini','aviez fini','avaient fini','avaient fini'],
-    futurAnterieur:['aurai fini','auras fini','aura fini','aura fini','aurons fini','aurez fini','auront fini','auront fini'],
-    conditionnelPasse:['aurais fini','aurais fini','aurait fini','aurait fini','aurions fini','auriez fini','auraient fini','auraient fini']
-  },
-  être:{
-    present:['suis','es','est','est','sommes','êtes','sont','sont'],
-    passeCompose:['ai été','as été','a été','a été','avons été','avez été','ont été','ont été'],
-    imparfait:['étais','étais','était','était','étions','étiez','étaient','étaient'],
-    futur:['serai','seras','sera','sera','serons','serez','seront','seront'],
-    conditionnel:['serais','serais','serait','serait','serions','seriez','seraient','seraient'],
-    subjonctif:['sois','sois','soit','soit','soyons','soyez','soient','soient'],
-    plusQueParfait:['avais été','avais été','avait été','avait été','avions été','aviez été','avaient été','avaient été'],
-    futurAnterieur:['aurai été','auras été','aura été','aura été','aurons été','aurez été','auront été','auront été'],
-    conditionnelPasse:['aurais été','aurais été','aurait été','aurait été','aurions été','auriez été','auraient été','auraient été']
-  },
-  avoir:{
-    present:['ai','as','a','a','avons','avez','ont','ont'],
-    passeCompose:['ai eu','as eu','a eu','a eu','avons eu','avez eu','ont eu','ont eu'],
-    imparfait:['avais','avais','avait','avait','avions','aviez','avaient','avaient'],
-    futur:['aurai','auras','aura','aura','aurons','aurez','auront','auront'],
-    conditionnel:['aurais','aurais','aurait','aurait','aurions','auriez','auraient','auraient'],
-    subjonctif:['aie','aies','ait','ait','ayons','ayez','aient','aient'],
-    plusQueParfait:['avais eu','avais eu','avait eu','avait eu','avions eu','aviez eu','avaient eu','avaient eu'],
-    futurAnterieur:['aurai eu','auras eu','aura eu','aura eu','aurons eu','aurez eu','auront eu','auront eu'],
-    conditionnelPasse:['aurais eu','aurais eu','aurait eu','aurait eu','aurions eu','auriez eu','auraient eu','auraient eu']
-  },
-  aller:{
-    present:['vais','vas','va','va','allons','allez','vont','vont'],
-    passeCompose:['suis allé|suis allée','es allé|es allée','est allé','est allée','sommes allés|sommes allées','êtes allés|êtes allées|êtes allé|êtes allée','sont allés','sont allées'],
-    imparfait:['allais','allais','allait','allait','allions','alliez','allaient','allaient'],
-    futur:['irai','iras','ira','ira','irons','irez','iront','iront'],
-    conditionnel:['irais','irais','irait','irait','irions','iriez','iraient','iraient'],
-    subjonctif:['aille','ailles','aille','aille','allions','alliez','aillent','aillent'],
-    plusQueParfait:['étais allé|étais allée','étais allé|étais allée','était allé','était allée','étions allés|étions allées','étiez allés|étiez allées|étiez allé|étiez allée','étaient allés','étaient allées'],
-    futurAnterieur:['serai allé|serai allée','seras allé|seras allée','sera allé','sera allée','serons allés|serons allées','serez allés|serez allées|serez allé|serez allée','seront allés','seront allées'],
-    conditionnelPasse:['serais allé|serais allée','serais allé|serais allée','serait allé','serait allée','serions allés|serions allées','seriez allés|seriez allées|seriez allé|seriez allée','seraient allés','seraient allées']
-  },
-  faire:{
-    present:['fais','fais','fait','fait','faisons','faites','font','font'],
-    passeCompose:['ai fait','as fait','a fait','a fait','avons fait','avez fait','ont fait','ont fait'],
-    imparfait:['faisais','faisais','faisait','faisait','faisions','faisiez','faisaient','faisaient'],
-    futur:['ferai','feras','fera','fera','ferons','ferez','feront','feront'],
-    conditionnel:['ferais','ferais','ferait','ferait','ferions','feriez','feraient','feraient'],
-    subjonctif:['fasse','fasses','fasse','fasse','fassions','fassiez','fassent','fassent'],
-    plusQueParfait:['avais fait','avais fait','avait fait','avait fait','avions fait','aviez fait','avaient fait','avaient fait'],
-    futurAnterieur:['aurai fait','auras fait','aura fait','aura fait','aurons fait','aurez fait','auront fait','auront fait'],
-    conditionnelPasse:['aurais fait','aurais fait','aurait fait','aurait fait','aurions fait','auriez fait','auraient fait','auraient fait']
-  },
-  savoir:{
-    present:['sais','sais','sait','sait','savons','savez','savent','savent'],
-    passeCompose:['ai su','as su','a su','a su','avons su','avez su','ont su','ont su'],
-    imparfait:['savais','savais','savait','savait','savions','saviez','savaient','savaient'],
-    futur:['saurai','sauras','saura','saura','saurons','saurez','sauront','sauront'],
-    conditionnel:['saurais','saurais','saurait','saurait','saurions','sauriez','sauraient','sauraient'],
-    subjonctif:['sache','saches','sache','sache','sachions','sachiez','sachent','sachent'],
-    plusQueParfait:['avais su','avais su','avait su','avait su','avions su','aviez su','avaient su','avaient su'],
-    futurAnterieur:['aurai su','auras su','aura su','aura su','aurons su','aurez su','auront su','auront su'],
-    conditionnelPasse:['aurais su','aurais su','aurait su','aurait su','aurions su','auriez su','auraient su','auraient su']
-  },
-  écrire:{
-    present:['écris','écris','écrit','écrit','écrivons','écrivez','écrivent','écrivent'],
-    passeCompose:['ai écrit','as écrit','a écrit','a écrit','avons écrit','avez écrit','ont écrit','ont écrit'],
-    imparfait:['écrivais','écrivais','écrivait','écrivait','écrivions','écriviez','écrivaient','écrivaient'],
-    futur:['écrirai','écriras','écrira','écrira','écrirons','écrirez','écriront','écriront'],
-    conditionnel:['écrirais','écrirais','écrirait','écrirait','écririons','écririez','écriraient','écriraient'],
-    subjonctif:['écrive','écrives','écrive','écrive','écrivions','écriviez','écrivent','écrivent'],
-    plusQueParfait:['avais écrit','avais écrit','avait écrit','avait écrit','avions écrit','aviez écrit','avaient écrit','avaient écrit'],
-    futurAnterieur:['aurai écrit','auras écrit','aura écrit','aura écrit','aurons écrit','aurez écrit','auront écrit','auront écrit'],
-    conditionnelPasse:['aurais écrit','aurais écrit','aurait écrit','aurait écrit','aurions écrit','auriez écrit','auraient écrit','auraient écrit']
-  },
-  lire:{
-    present:['lis','lis','lit','lit','lisons','lisez','lisent','lisent'],
-    passeCompose:['ai lu','as lu','a lu','a lu','avons lu','avez lu','ont lu','ont lu'],
-    imparfait:['lisais','lisais','lisait','lisait','lisions','lisiez','lisaient','lisaient'],
-    futur:['lirai','liras','lira','lira','lirons','lirez','liront','liront'],
-    conditionnel:['lirais','lirais','lirait','lirait','lirions','liriez','liraient','liraient'],
-    subjonctif:['lise','lises','lise','lise','lisions','lisiez','lisent','lisent'],
-    plusQueParfait:['avais lu','avais lu','avait lu','avait lu','avions lu','aviez lu','avaient lu','avaient lu'],
-    futurAnterieur:['aurai lu','auras lu','aura lu','aura lu','aurons lu','aurez lu','auront lu','auront lu'],
-    conditionnelPasse:['aurais lu','aurais lu','aurait lu','aurait lu','aurions lu','auriez lu','auraient lu','auraient lu']
-  }
-};
-
+// Conjugation dataset and verb meanings are injected from data.generated.js
+const verbMeanings = window.VERB_MEANINGS;
+const data = window.VERB_DATA;
 const verbs = Object.keys(data);
 
 let questions = [];
