@@ -178,15 +178,18 @@ body{
   box-shadow:0 18px 40px -20px rgba(26,31,46,.35);
   border-color:rgba(26,31,46,.25);
 }
-.tense-card[data-mode="present"]{--c1:#ffe9c2}
-.tense-card[data-mode="passeCompose"]{--c1:#f4cccc}
-.tense-card[data-mode="imparfait"]{--c1:#d9e6c8}
-.tense-card[data-mode="futur"]{--c1:#cfe0f0}
-.tense-card[data-mode="conditionnel"]{--c1:#e6d4ec}
-.tense-card[data-mode="subjonctif"]{--c1:#f0d9c2}
-.tense-card[data-mode="plusQueParfait"]{--c1:#d5c8a8}
-.tense-card[data-mode="futurAnterieur"]{--c1:#c2d4e6}
-.tense-card[data-mode="conditionnelPasse"]{--c1:#d8c5dc}
+/* Colors are grouped by tense-family with light→dark shades within a family.
+   Past trio = sepia/brown · Future pair = blue · Conditional pair = mauve
+   Present = warm cream · Subjunctive = sage green · Mixed = ink */
+.tense-card[data-mode="present"]         {--c1:#fce4b0}  /* present — warm cream */
+.tense-card[data-mode="passeCompose"]    {--c1:#ecc9a5}  /* past — light sepia */
+.tense-card[data-mode="imparfait"]       {--c1:#d6a574}  /* past — mid sepia */
+.tense-card[data-mode="plusQueParfait"]  {--c1:#a87a4a}  /* past — dark sepia */
+.tense-card[data-mode="futur"]           {--c1:#cfdff0}  /* future — light sky */
+.tense-card[data-mode="futurAnterieur"]  {--c1:#88a8c8}  /* future — deep blue */
+.tense-card[data-mode="conditionnel"]    {--c1:#e0c8e8}  /* cond. — light lavender */
+.tense-card[data-mode="conditionnelPasse"]{--c1:#ad88bc} /* cond. — deeper mauve */
+.tense-card[data-mode="subjonctif"]      {--c1:#c8dca4}  /* subj. — sage */
 .tense-card[data-mode="mixed"]{--c1:#1a1f2e;color:#fbf7ef}
 .tense-card[data-mode="mixed"] .tense-name,
 .tense-card[data-mode="mixed"] .tense-num,
@@ -712,47 +715,47 @@ input:focus{
 
   <div class="tense-grid">
     <button class="tense-card" data-mode="present" onclick="startGame('present')">
-      <div class="tense-num">01 · INDICATIF</div>
+      <div class="tense-num">PRESENT</div>
       <div class="tense-name">Présent</div>
       <div class="tense-hint">I do · I am doing</div>
     </button>
     <button class="tense-card" data-mode="passeCompose" onclick="startGame('passeCompose')">
-      <div class="tense-num">02 · INDICATIF</div>
+      <div class="tense-num">PAST · RECENT</div>
       <div class="tense-name">Passé Composé</div>
       <div class="tense-hint">I did · I have done</div>
     </button>
     <button class="tense-card" data-mode="imparfait" onclick="startGame('imparfait')">
-      <div class="tense-num">03 · INDICATIF</div>
+      <div class="tense-num">PAST · ONGOING</div>
       <div class="tense-name">Imparfait</div>
       <div class="tense-hint">I was doing · I used to do</div>
     </button>
     <button class="tense-card" data-mode="plusQueParfait" onclick="startGame('plusQueParfait')">
-      <div class="tense-num">04 · INDICATIF</div>
+      <div class="tense-num">PAST · DISTANT</div>
       <div class="tense-name">Plus-que-parfait</div>
       <div class="tense-hint">I had done</div>
     </button>
     <button class="tense-card" data-mode="futur" onclick="startGame('futur')">
-      <div class="tense-num">05 · INDICATIF</div>
+      <div class="tense-num">FUTURE · SIMPLE</div>
       <div class="tense-name">Futur Simple</div>
       <div class="tense-hint">I will do</div>
     </button>
     <button class="tense-card" data-mode="futurAnterieur" onclick="startGame('futurAnterieur')">
-      <div class="tense-num">06 · INDICATIF</div>
+      <div class="tense-num">FUTURE · COMPOUND</div>
       <div class="tense-name">Futur Antérieur</div>
       <div class="tense-hint">I will have done</div>
     </button>
     <button class="tense-card" data-mode="conditionnel" onclick="startGame('conditionnel')">
-      <div class="tense-num">07 · MODE</div>
+      <div class="tense-num">CONDITIONAL · PRESENT</div>
       <div class="tense-name">Conditionnel Présent</div>
       <div class="tense-hint">I would do</div>
     </button>
     <button class="tense-card" data-mode="conditionnelPasse" onclick="startGame('conditionnelPasse')">
-      <div class="tense-num">08 · MODE</div>
+      <div class="tense-num">CONDITIONAL · PAST</div>
       <div class="tense-name">Conditionnel Passé</div>
       <div class="tense-hint">I would have done</div>
     </button>
     <button class="tense-card" data-mode="subjonctif" onclick="startGame('subjonctif')">
-      <div class="tense-num">09 · MODE</div>
+      <div class="tense-num">SUBJUNCTIVE</div>
       <div class="tense-name">Subjonctif Présent</div>
       <div class="tense-hint">(that) I do</div>
     </button>
@@ -762,7 +765,7 @@ input:focus{
 
   <div class="tense-grid">
     <button class="tense-card" data-mode="mixed" onclick="startGame('mixed')" style="grid-column:1/-1">
-      <div class="tense-num">∞ · ALL TENSES</div>
+      <div class="tense-num">ALL TENSES · MIXED</div>
       <div class="tense-name">Mixed Drill</div>
       <div class="tense-hint">4 verbs, 4 pronouns each, every pronoun in a random tense. The real test.</div>
     </button>
@@ -931,6 +934,9 @@ function setDate(){
 setDate();
 
 function startGame(mode){
+  // Start ambient music the very first time the user enters an exercise
+  if(typeof window.startMusicOnce === 'function') window.startMusicOnce();
+
   questions=[];current=0;score=0;streak=0;bestStreak=0;
 
   const isMixed = mode === 'mixed';
@@ -1254,21 +1260,25 @@ const Sound = (() => {
 
   function setSfx(on){ sfxOn = on; ensure(); }
 
-  return { click, ding, setMusic, setSfx, get musicOn(){return musicOn}, get sfxOn(){return sfxOn} };
+  function resetProgression(){
+    chordIdx = 0;
+    if(musicTimer){ clearTimeout(musicTimer); musicTimer = null; }
+  }
+
+  return { click, ding, setMusic, setSfx, resetProgression,
+           get musicOn(){return musicOn}, get sfxOn(){return sfxOn} };
 })();
 
-// Auto-start ambient music a couple seconds after render.
-// Browsers block autoplay until a user gesture, so we always have a one-time
-// gesture listener as a fallback that will (re)start the music on first interaction.
-const startMusic = () => Sound.setMusic(true);
-setTimeout(startMusic, 2200);
-const gestureStart = () => {
-  startMusic();
-  document.removeEventListener('click', gestureStart);
-  document.removeEventListener('keydown', gestureStart);
+// Music starts the first time the user opens any exercise — and keeps playing
+// until the tab closes. We do not auto-start on page load (would tick silently
+// behind the browser's autoplay block, then resume mid-progression on first click).
+let _musicHasStarted = false;
+window.startMusicOnce = function(){
+  if(_musicHasStarted) return;
+  _musicHasStarted = true;
+  Sound.resetProgression();
+  Sound.setMusic(true);
 };
-document.addEventListener('click', gestureStart);
-document.addEventListener('keydown', gestureStart);
 
 // Typewriter click on every keystroke inside an answer input
 document.addEventListener('keydown', (e) => {
