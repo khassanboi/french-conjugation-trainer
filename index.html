@@ -53,13 +53,9 @@ body{
 
 /* ─── HEADER ─────────────────────────── */
 .masthead{
-  display:flex;
-  align-items:baseline;
-  justify-content:space-between;
-  gap:20px;
+  display:block;
   padding-bottom:18px;
   margin-bottom:28px;
-  border-bottom:1px solid var(--line);
 }
 .masthead-left{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
 .brand{
@@ -499,6 +495,126 @@ input:focus{
   font-style:italic;
 }
 
+/* ─── NEWSPAPER ORNAMENTS ────────────── */
+.masthead{
+  position:relative;
+  border-bottom:3px double var(--ink);
+  padding-bottom:14px;
+}
+.masthead-meta{
+  display:flex;
+  gap:18px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  opacity:.75;
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px solid var(--line);
+  flex-wrap:wrap;
+}
+.masthead-meta span{display:inline-flex;align-items:center;gap:6px}
+.masthead-meta .sep{opacity:.4}
+
+.tagline{
+  text-align:center;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:.95rem;
+  color:var(--ink-soft);
+  opacity:.75;
+  margin:-8px 0 24px;
+  letter-spacing:.02em;
+}
+.tagline::before,
+.tagline::after{
+  content:'❦';
+  margin:0 12px;
+  color:var(--burgundy);
+  opacity:.6;
+  font-size:.85rem;
+}
+
+.fleuron{
+  text-align:center;
+  font-family:'Cormorant Garamond',serif;
+  color:var(--burgundy);
+  opacity:.55;
+  font-size:1.4rem;
+  margin:22px 0 14px;
+  letter-spacing:.4em;
+  user-select:none;
+}
+
+.hero-title{position:relative}
+.hero-title .dropcap{
+  font-family:'Cormorant Garamond',serif;
+  float:left;
+  font-size:5rem;
+  line-height:.85;
+  padding:6px 12px 0 0;
+  color:var(--burgundy);
+  font-weight:600;
+  font-style:normal;
+}
+.hero-sub{
+  position:relative;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.12rem;
+  line-height:1.55;
+  color:var(--ink-soft);
+}
+.hero-sub .editorial-kicker{
+  display:block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.65rem;
+  letter-spacing:.25em;
+  text-transform:uppercase;
+  color:var(--burgundy);
+  margin-bottom:8px;
+  opacity:.85;
+}
+.hero-sub .signoff{
+  display:block;
+  margin-top:10px;
+  font-style:italic;
+  font-size:.92rem;
+  opacity:.7;
+}
+
+/* sound controls */
+.sound-controls{
+  display:flex;
+  gap:6px;
+  margin-left:8px;
+}
+.sound-btn{
+  width:34px;height:34px;
+  border-radius:50%;
+  border:1px solid var(--line);
+  background:var(--paper);
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:.95rem;
+  color:var(--ink-soft);
+  transition:.2s;
+  padding:0;
+  font-family:inherit;
+}
+.sound-btn:hover{border-color:var(--burgundy);color:var(--burgundy)}
+.sound-btn.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.sound-btn .sr{position:absolute;left:-9999px}
+
+.section-label .lbl-orn{
+  color:var(--burgundy);
+  opacity:.6;
+  margin-right:8px;
+}
+
 /* ─── RESULTS ────────────────────────── */
 .results{
   display:none;
@@ -569,11 +685,29 @@ input:focus{
 <div class="shell">
 
 <header class="masthead">
-  <div class="masthead-left">
-    <div class="brand">Le <span class="accent">Conjugueur</span></div>
-    <div class="tag">N° 4 · Édition Révisée</div>
+  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap">
+    <div class="masthead-left">
+      <div class="brand">Le <span class="accent">Conjugueur</span></div>
+      <div class="tag">Vol. CI · N° 4 · Édition Révisée</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div class="date" id="todayDate"></div>
+      <div class="sound-controls">
+        <button id="musicBtn" class="sound-btn" title="Café ambient music — currently off" aria-label="Toggle ambient music">♪</button>
+        <button id="sfxBtn" class="sound-btn on" title="Typewriter clicks — currently on" aria-label="Toggle typewriter sounds">⌨</button>
+      </div>
+    </div>
   </div>
-  <div class="date" id="todayDate"></div>
+  <div class="masthead-meta">
+    <span>Établi en 2026</span>
+    <span class="sep">·</span>
+    <span>Quartier Latin, Paris</span>
+    <span class="sep">·</span>
+    <span id="weatherStr">Brumeux, 14°C, vent léger d'ouest</span>
+    <span class="sep">·</span>
+    <span>Prix : un café noir</span>
+  </div>
+  <div class="tagline">All the verbs that are fit to drill</div>
 </header>
 
 <!-- ─── MENU ─── -->
@@ -582,7 +716,11 @@ input:focus{
   <section class="menu-hero">
     <div>
       <h1 class="hero-title">Maîtrisez la <em>conjugaison</em> française, un verbe à la fois.</h1>
-      <p class="hero-sub">Ten verbs per round, two pronouns each — always one singular + one plural, from different persons. Mixed mode: four verbs, four pronouns, four different tenses apiece. Accents forgiven, just noted.</p>
+      <p class="hero-sub">
+        <span class="editorial-kicker">— De la rédaction —</span>
+        <span class="dropcap">D</span>ispatches from the front lines of French grammar. Ten verbs per round, two pronouns apiece — one singular, one plural, drawn from different persons, as the rules of polite drilling demand. The <em>Mixed Drill</em> pits four verbs against four tenses; survivors are entitled to a café crème and a knowing glance. Accents are forgiven — these are difficult times — but we shall note them all the same.
+        <span class="signoff">— signé, la Rédaction du Conjugueur</span>
+      </p>
     </div>
     <div class="hero-art" aria-hidden="true">
       <svg viewBox="0 0 200 200" fill="none">
@@ -596,7 +734,9 @@ input:focus{
     </div>
   </section>
 
-  <div class="section-label">Choose a tense</div>
+  <div class="fleuron">❦ · ❦ · ❦</div>
+
+  <div class="section-label"><span class="lbl-orn">§</span> Today's Drills · Choose a Tense</div>
 
   <div class="tense-grid">
     <button class="tense-card" data-mode="present" onclick="startGame('present')">
@@ -646,7 +786,7 @@ input:focus{
     </button>
   </div>
 
-  <div class="section-label">Or take the full challenge</div>
+  <div class="section-label"><span class="lbl-orn">§</span> The Editor's Challenge</div>
 
   <div class="tense-grid">
     <button class="tense-card" data-mode="mixed" onclick="startGame('mixed')" style="grid-column:1/-1">
@@ -707,16 +847,17 @@ input:focus{
       </button>
     </div>
 
-    <div class="footnote">Correct every mistake before the next verb. Missing accents are accepted but noted.</div>
+    <div class="footnote">— Every error must be amended before the press goes to print · Missing accents are admitted into the record with a polite cough —</div>
 
   </div>
 
   <div class="results" id="results">
-    <div class="results-eyebrow">— Fin de la partie —</div>
-    <h2 class="results-title">C'est fini.</h2>
-    <div class="results-score" id="finalScore">0/15</div>
+    <div class="results-eyebrow">— Édition Spéciale · Bilan du Jour —</div>
+    <h2 class="results-title">La séance est levée.</h2>
+    <div class="results-score" id="finalScore">0/10</div>
     <p class="results-msg" id="finalMsg"></p>
-    <button class="btn-primary" onclick="restart()">Return to the Menu</button>
+    <div class="fleuron" style="margin:18px 0 22px">❦</div>
+    <button class="btn-primary" onclick="restart()">Return to the Front Page</button>
   </div>
 
 </div>
@@ -801,8 +942,26 @@ function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5)}
 
 function setDate(){
   const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const days=['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
   const d=new Date();
-  document.getElementById('todayDate').textContent=`Paris · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  document.getElementById('todayDate').textContent =
+    `${days[d.getDay()]} · ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+
+  // whimsical "weather" line that rotates by day of year
+  const wx = [
+    'Brumeux, 14°C, vent léger d\'ouest',
+    'Ensoleillé, 22°C, ciel d\'un bleu insolent',
+    'Pluvieux, 11°C, parapluies obligatoires',
+    'Couvert, 16°C, lumière de Doisneau',
+    'Doux, 19°C, terrasses bondées',
+    'Frais, 9°C, écharpe recommandée',
+    'Orageux, 17°C, garçons de café nerveux'
+  ];
+  const wEl = document.getElementById('weatherStr');
+  if(wEl){
+    const dayOfYear = Math.floor((d - new Date(d.getFullYear(),0,0)) / 86400000);
+    wEl.textContent = wx[dayOfYear % wx.length];
+  }
 }
 setDate();
 
@@ -910,6 +1069,7 @@ function checkAnswers(){
     if(streak>bestStreak) bestStreak=streak;
     document.getElementById('score').textContent = score;
     document.getElementById('streak').textContent = streak;
+    if(typeof Sound!=='undefined') Sound.ding();
 
     setTimeout(()=>{
       current++;
@@ -930,10 +1090,10 @@ function finish(){
 
   let msg;
   const pct = score/questions.length;
-  if(pct===1) msg = `Magnifique. A flawless run — Académie française would approve. Best streak: ${bestStreak}.`;
-  else if(pct>=.8) msg = `Très bien. You moved through the conjugations with grace. Best streak: ${bestStreak}.`;
-  else if(pct>=.5) msg = `Pas mal. The trickier verbs revealed themselves — review and run it again. Best streak: ${bestStreak}.`;
-  else msg = `Courage. Every conjugation drilled is one earned. Try the same tense once more. Best streak: ${bestStreak}.`;
+  if(pct===1)        msg = `Magnifique. The Académie française tips its bicorne. The presses stop in your honour. Best streak: ${bestStreak}.`;
+  else if(pct>=.8)   msg = `Très bien. The editor nods over his espresso. A few smudges, nothing the printer can't tidy. Best streak: ${bestStreak}.`;
+  else if(pct>=.5)   msg = `Pas mal. Some verbs went to press with typos — the corrections column awaits tomorrow. Best streak: ${bestStreak}.`;
+  else               msg = `Courage. Even Flaubert tore up drafts. Another edition, another chance. Best streak: ${bestStreak}.`;
   document.getElementById('finalMsg').textContent = msg;
 }
 
@@ -963,6 +1123,158 @@ document.addEventListener('click',e=>{
     active.focus();
   }
 });
+
+/* ─────────────────────────────────────────────────────────────────
+   AUDIO — typewriter clicks + Parisian café ambient piano
+   All generated in-browser via Web Audio API (no external assets)
+   ───────────────────────────────────────────────────────────────── */
+const Sound = (() => {
+  let ctx, masterGain, musicGain, sfxGain;
+  let musicOn = false, sfxOn = true;
+  let musicTimer = null;
+  let started = false;
+
+  function ensure(){
+    if(ctx) return;
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return;
+    ctx = new AC();
+    masterGain = ctx.createGain(); masterGain.gain.value = 1; masterGain.connect(ctx.destination);
+    musicGain = ctx.createGain(); musicGain.gain.value = 0.18; musicGain.connect(masterGain);
+    sfxGain = ctx.createGain(); sfxGain.gain.value = 0.35; sfxGain.connect(masterGain);
+  }
+
+  // Typewriter click: short filtered noise burst
+  function click(){
+    if(!sfxOn) return;
+    ensure(); if(!ctx) return;
+    const t = ctx.currentTime;
+    const bufSize = Math.floor(ctx.sampleRate * 0.04);
+    const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i=0;i<bufSize;i++) d[i] = (Math.random()*2-1) * Math.exp(-i/(bufSize*0.25));
+    const src = ctx.createBufferSource(); src.buffer = buf;
+    const bp = ctx.createBiquadFilter(); bp.type='bandpass';
+    bp.frequency.value = 1800 + Math.random()*900;
+    bp.Q.value = 4;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.6, t+0.002);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+0.05);
+    src.connect(bp).connect(g).connect(sfxGain);
+    src.start(t); src.stop(t+0.06);
+  }
+
+  // Soft "ding" for correct answer (typewriter carriage bell)
+  function ding(){
+    if(!sfxOn) return;
+    ensure(); if(!ctx) return;
+    const t = ctx.currentTime;
+    [1760, 2637].forEach((f,i)=>{
+      const o = ctx.createOscillator(); o.type='sine'; o.frequency.value=f;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.18, t+0.005);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+1.2);
+      o.connect(g).connect(sfxGain);
+      o.start(t); o.stop(t+1.3);
+    });
+  }
+
+  // Ambient music: jazz-cafe chord progression, slow arpeggios on soft piano-ish tones
+  // Progression in Dm: Dm7 - G7 - Cmaj7 - Am7 (ii-V-I-vi)
+  const PROG = [
+    [62, 65, 69, 72], // Dm7:  D F A C
+    [55, 59, 62, 65], // G7:   G B D F
+    [60, 64, 67, 71], // Cmaj7:C E G B
+    [57, 60, 64, 67], // Am7:  A C E G
+  ];
+  let chordIdx = 0;
+
+  function midi(n){ return 440 * Math.pow(2, (n-69)/12); }
+
+  function pluckNote(freq, when, dur=2.0, vol=0.22){
+    // Two-osc bell-ish piano tone with slow attack/release
+    const o1 = ctx.createOscillator(); o1.type='triangle'; o1.frequency.value = freq;
+    const o2 = ctx.createOscillator(); o2.type='sine';     o2.frequency.value = freq*2;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, when);
+    g.gain.exponentialRampToValueAtTime(vol, when+0.04);
+    g.gain.exponentialRampToValueAtTime(0.0001, when+dur);
+    const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=2200;
+    o1.connect(lp); o2.connect(lp); lp.connect(g).connect(musicGain);
+    o1.start(when); o2.start(when);
+    o1.stop(when+dur+0.05); o2.stop(when+dur+0.05);
+  }
+
+  function playChord(){
+    if(!musicOn || !ctx) return;
+    const chord = PROG[chordIdx % PROG.length];
+    const t = ctx.currentTime;
+    const dur = 3.6;
+    // Bass note (low octave of root)
+    pluckNote(midi(chord[0]-12), t, dur*1.4, 0.18);
+    // Arpeggio of the chord across the duration
+    const order = [1,2,3,2,1,3,2];
+    order.forEach((idx,i)=>{
+      const note = chord[idx % chord.length];
+      pluckNote(midi(note), t + i*(dur/order.length), 1.4, 0.13);
+    });
+    chordIdx++;
+    musicTimer = setTimeout(playChord, dur*1000);
+  }
+
+  function setMusic(on){
+    musicOn = on;
+    if(on){
+      ensure(); if(!ctx) return;
+      if(ctx.state === 'suspended') ctx.resume();
+      // fade in
+      musicGain.gain.cancelScheduledValues(ctx.currentTime);
+      musicGain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      musicGain.gain.exponentialRampToValueAtTime(0.18, ctx.currentTime+1.2);
+      if(!musicTimer) playChord();
+    }else{
+      if(ctx){
+        musicGain.gain.cancelScheduledValues(ctx.currentTime);
+        musicGain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.6);
+      }
+      if(musicTimer){ clearTimeout(musicTimer); musicTimer = null; }
+    }
+  }
+
+  function setSfx(on){ sfxOn = on; ensure(); }
+
+  return { click, ding, setMusic, setSfx, get musicOn(){return musicOn}, get sfxOn(){return sfxOn} };
+})();
+
+// Wire up sound buttons
+const musicBtn = document.getElementById('musicBtn');
+const sfxBtn = document.getElementById('sfxBtn');
+
+musicBtn.addEventListener('click', () => {
+  const next = !Sound.musicOn;
+  Sound.setMusic(next);
+  musicBtn.classList.toggle('on', next);
+  musicBtn.title = `Café ambient music — currently ${next?'on':'off'}`;
+});
+sfxBtn.addEventListener('click', () => {
+  const next = !Sound.sfxOn;
+  Sound.setSfx(next);
+  sfxBtn.classList.toggle('on', next);
+  sfxBtn.title = `Typewriter clicks — currently ${next?'on':'off'}`;
+  if(next) Sound.click(); // little preview
+});
+
+// Typewriter click on every keystroke inside an answer input
+document.addEventListener('keydown', (e) => {
+  if(e.target && e.target.tagName === 'INPUT' && e.key.length === 1){
+    Sound.click();
+  }else if(e.key === 'Backspace' && e.target && e.target.tagName === 'INPUT'){
+    Sound.click();
+  }
+});
+
 </script>
 
 </body>
