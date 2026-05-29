@@ -6,7 +6,7 @@
 <title>Le Conjugueur — French Conjugation Trainer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&family=UnifrakturMaguntia&family=Playfair+Display:ital,wght@0,700;0,800;1,700&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -57,29 +57,32 @@ body{
   padding-bottom:18px;
   margin-bottom:28px;
 }
-.masthead-left{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.masthead-left{display:flex;flex-direction:column;gap:6px}
 .brand{
-  font-family:'Cormorant Garamond',serif;
-  font-weight:600;
-  font-size:2rem;
-  letter-spacing:.5px;
+  font-family:'UnifrakturMaguntia',serif;
+  font-weight:400;
+  font-size:clamp(2.4rem, 6.5vw, 4.6rem);
+  line-height:.95;
+  letter-spacing:0;
   color:var(--ink);
 }
-.brand .accent{color:var(--burgundy);font-style:italic}
+.brand .accent{color:var(--burgundy);font-style:normal}
 .tag{
-  font-size:.72rem;
-  letter-spacing:.22em;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;
+  letter-spacing:.28em;
   text-transform:uppercase;
   color:var(--ink-soft);
-  opacity:.7;
+  opacity:.75;
 }
 .date{
   font-family:'JetBrains Mono',monospace;
   font-size:.72rem;
-  letter-spacing:.15em;
+  letter-spacing:.18em;
   text-transform:uppercase;
   color:var(--ink-soft);
-  opacity:.7;
+  opacity:.75;
+  text-align:right;
 }
 
 /* ─── MENU ───────────────────────────── */
@@ -91,16 +94,18 @@ body{
   margin-bottom:36px;
 }
 .hero-title{
-  font-family:'Cormorant Garamond',serif;
-  font-weight:500;
-  font-size:clamp(2.4rem,5vw,3.8rem);
-  line-height:1.05;
-  margin:0 0 16px;
-  letter-spacing:-.5px;
+  font-family:'Playfair Display','Cormorant Garamond',serif;
+  font-weight:700;
+  font-size:clamp(2.6rem, 5.8vw, 4.4rem);
+  line-height:1.02;
+  margin:0 0 14px;
+  letter-spacing:-1px;
+  color:var(--ink);
 }
 .hero-title em{
   font-style:italic;
   color:var(--burgundy);
+  font-weight:700;
 }
 .hero-sub{
   font-size:1.02rem;
@@ -263,19 +268,32 @@ body{
   filter:none;
 }
 
-.tense-num{display:none}
+.tense-num{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.66rem;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  opacity:.7;
+  font-weight:500;
+}
+/* ── Unified tense-name style ── used on menu cards, exercise badge, mixed row tags */
 .tense-name{
   font-family:'Cormorant Garamond',serif;
-  font-size:1.85rem;
+  font-size:1.95rem;
   font-weight:600;
-  line-height:1.1;
-  margin:8px 0 6px;
+  font-style:italic;
+  line-height:1.05;
+  margin:6px 0 6px;
+  color:var(--ink);
   position:relative;
 }
 .tense-hint{
-  font-size:.85rem;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
+  font-size:.95rem;
   color:var(--ink-soft);
-  opacity:.75;
+  opacity:.85;
   position:relative;
 }
 
@@ -375,18 +393,19 @@ body{
   margin-bottom:24px;
   flex-wrap:wrap;
 }
+/* Exercise badge — uses the unified tense-name style + theme box */
 .tense-now{
   display:inline-block;
   font-family:'Cormorant Garamond',serif;
-  font-size:1.45rem;
-  font-style:italic;
+  font-size:1.55rem;
   font-weight:600;
+  font-style:italic;
+  line-height:1;
   color:var(--theme,var(--burgundy));
   background:var(--theme-wash,rgba(139,35,49,.08));
-  padding:4px 14px;
-  border-radius:8px;
+  padding:6px 16px;
+  border-radius:10px;
   border:1.5px solid var(--theme,var(--burgundy));
-  letter-spacing:.01em;
   margin-bottom:2px;
 }
 .verb-display{
@@ -435,18 +454,20 @@ body{
   color:var(--ink);
   line-height:1.1;
 }
+/* Per-row tense tag (Mixed mode) — same unified tense-name style, smaller, theme-colored */
 .row-tense{
   display:inline-block;
-  margin-top:4px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:.62rem;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--burgundy);
-  background:rgba(139,35,49,.08);
-  padding:3px 8px;
-  border-radius:6px;
+  margin-top:6px;
+  font-family:'Cormorant Garamond',serif;
+  font-style:italic;
   font-weight:600;
+  font-size:1rem;
+  line-height:1;
+  color:var(--tense-color,var(--burgundy));
+  background:var(--tense-wash,rgba(139,35,49,.08));
+  border:1.5px solid var(--tense-color,var(--burgundy));
+  padding:3px 10px;
+  border-radius:7px;
 }
 .field{position:relative}
 input{
@@ -765,17 +786,84 @@ input.correct:focus,input.warning:focus,input.wrong:focus{
 .results .btn-primary{max-width:280px;margin:0 auto;display:flex}
 
 /* ─── RESPONSIVE ─────────────────────── */
+/* Tablet ≤ 760px */
 @media(max-width:760px){
-  body{padding:20px 14px 40px}
-  .menu-hero{grid-template-columns:1fr;gap:18px}
-  .hero-art{max-width:200px;margin:0 auto}
+  body{padding:18px 14px 40px}
+  .masthead{padding-bottom:14px}
+  .masthead-row{align-items:flex-start}
+  .menu-hero{grid-template-columns:1fr;gap:14px}
+  .menu-hero .hero-art{max-width:180px;margin:0 auto}
   .row{grid-template-columns:1fr;gap:6px}
-  .pronoun{padding-top:0;font-size:1.3rem}
-  .stage{padding:26px 22px}
+  .pronoun{padding-top:0;font-size:1.25rem}
+  .stage{padding:24px 18px}
+  .stage-header{flex-direction:column;align-items:flex-start;gap:8px}
   .verb-display{font-size:2.6rem}
   .q-counter{display:none}
-  .brand{font-size:1.5rem}
-  .date{display:none}
+  .tagline{font-size:.95rem;margin:8px 0 6px}
+  .masthead-meta{font-size:.58rem;letter-spacing:.16em;line-height:1.7}
+  .fam-label{font-size:.62rem;letter-spacing:.22em;margin:14px 0 4px}
+  .hero-sub{font-size:.96rem;line-height:1.55}
+  .hero-title .dropcap{font-size:3.6rem}
+}
+
+/* Phone ≤ 540px — switch to digital news-app look (drop newspaper ornaments) */
+@media(max-width:540px){
+  body{
+    padding:14px 12px 32px;
+    background:#fbf7ef;  /* flat paper, no decorative radial blobs */
+  }
+  .shell{max-width:100%}
+  .masthead{border-bottom:1px solid var(--line);padding-bottom:10px;margin-bottom:18px}
+  .masthead-row{align-items:center;justify-content:space-between}
+  .brand{
+    font-family:'Playfair Display','Cormorant Garamond',serif;  /* readable bold serif at small sizes */
+    font-weight:800;
+    font-size:1.85rem;
+    letter-spacing:-.5px;
+  }
+  .tag{display:none}
+  .date{font-size:.65rem;letter-spacing:.12em}
+  .tagline, .masthead-meta, .fleuron, .footnote{display:none}
+  .section-label{font-size:.6rem;letter-spacing:.18em;margin:6px 0 10px}
+
+  .hero-title{font-size:2rem;line-height:1.1;letter-spacing:-.5px}
+  .hero-sub{
+    font-family:'Inter',sans-serif;  /* clean digital body */
+    font-size:.92rem;
+    line-height:1.5;
+    color:var(--ink);
+  }
+  .hero-sub .editorial-kicker{font-size:.6rem}
+  .hero-sub .signoff{font-size:.82rem}
+  .hero-sub .dropcap{display:none}
+  .hero-art{display:none}
+
+  /* Cards full-width, generous touch targets */
+  .fam-row, .tense-grid{grid-template-columns:1fr;gap:10px;margin-bottom:6px}
+  .tense-card{padding:18px 18px 16px;border-radius:14px}
+  .tense-name{font-size:1.55rem;margin:4px 0 4px}
+  .tense-hint{font-size:.88rem}
+  .fam-label{font-size:.58rem;letter-spacing:.2em;margin:12px 0 2px}
+
+  /* Exercise stage */
+  .stage{padding:20px 16px;border-radius:18px}
+  .hud{gap:8px}
+  .hud-pill{padding:6px 12px;font-size:.74rem}
+  .hud-pill .dot{display:none}
+  .hud-quit{padding:6px 12px;font-size:.74rem}
+  .verb-display{font-size:2.2rem}
+  .verb-en{font-size:.78rem}
+  .tense-now{font-size:1.25rem;padding:5px 12px;border-radius:8px}
+  input{font-size:1rem;padding:13px 42px 13px 14px}
+  .accent-key{font-size:1.35rem;padding:8px 14px;min-width:46px}
+  .field-correction{font-size:.85rem;top:-22px}
+  .btn-primary{padding:14px;font-size:.88rem}
+
+  /* Results */
+  .results{padding:32px 18px;border-radius:18px}
+  .results-title{font-size:2rem}
+  .results-score{font-size:3.6rem}
+  .results-msg{font-size:.95rem}
 }
 </style>
 </head>
@@ -791,6 +879,7 @@ input.correct:focus,input.warning:focus,input.wrong:focus{
     </div>
     <div class="date" id="todayDate"></div>
   </div>
+  <div class="tagline">— Tous les verbes dignes d'être conjugués · All the verbs that are fit to drill —</div>
   <div class="masthead-meta">
     Établi en 2026 &nbsp;·&nbsp; Quartier Latin, Paris &nbsp;·&nbsp; <span id="weatherStr">Brumeux, 14°C, vent léger d'ouest</span> &nbsp;·&nbsp; Prix : un café noir
   </div>
@@ -801,7 +890,12 @@ input.correct:focus,input.warning:focus,input.wrong:focus{
 
   <section class="menu-hero">
     <div>
-      <h1 class="hero-title">Maîtrisez la <em>conjugaison</em> française, un verbe à la fois.</h1>
+      <h1 class="hero-title"><em>Bouclage</em> à minuit. Les verbes attendent votre crayon rouge.</h1>
+      <p class="hero-sub">
+        <span class="editorial-kicker">— DE LA RÉDACTION · THE EDITOR'S DESK —</span>
+        <span class="dropcap">L</span>es rotatives tournent à l'aube. Avant la mise sous presse, l'édition de demain doit passer entre vos mains : dix verbes mal conjugués réclament correction — chacun assorti de deux pronoms, un singulier et un pluriel, tirés de personnes différentes. Le <em>Drill Mixte</em> oppose quatre verbes à quatre temps ; les survivants gagnent un café crème et un regard entendu du chef de rubrique. Les accents oubliés ? Pardonnés, certes — mais notés en marge, comme il se doit.
+        <span class="signoff">— signé, le Rédacteur en chef</span>
+      </p>
     </div>
     <div class="hero-art" aria-hidden="true">
       <svg viewBox="0 0 200 200" fill="none">
@@ -817,74 +911,78 @@ input.correct:focus,input.warning:focus,input.wrong:focus{
 
   <div class="fleuron">❦ · ❦ · ❦</div>
 
+  <div class="section-label"><span class="lbl-orn">§</span> Au sommaire · Today's Contents</div>
+
   <div class="fam-row">
-    <div class="fam-label" style="--accent:#5b9438"></div>
+    <div class="fam-label" style="--accent:#5b9438">Présent · Present</div>
     <button class="tense-card" data-mode="present" onclick="startGame('present')">
-      <div class="tense-num">PRESENT</div>
+      <div class="tense-num">Présent · Present</div>
       <div class="tense-name">Présent</div>
       <div class="tense-hint">I do · I am doing</div>
     </button>
   </div>
 
   <div class="fam-row">
-    <div class="fam-label" style="--accent:#b02828"></div>
+    <div class="fam-label" style="--accent:#b02828">Passé · Past</div>
     <button class="tense-card" data-mode="passeCompose" onclick="startGame('passeCompose')">
-      <div class="tense-num">PAST · RECENT</div>
+      <div class="tense-num">Passé · Past · Récent</div>
       <div class="tense-name">Passé Composé</div>
       <div class="tense-hint">I did · I have done</div>
     </button>
     <button class="tense-card" data-mode="imparfait" onclick="startGame('imparfait')">
-      <div class="tense-num">PAST · ONGOING</div>
+      <div class="tense-num">Passé · Past · Continu</div>
       <div class="tense-name">Imparfait</div>
       <div class="tense-hint">I was doing · I used to do</div>
     </button>
     <button class="tense-card" data-mode="plusQueParfait" onclick="startGame('plusQueParfait')">
-      <div class="tense-num">PAST · DISTANT</div>
+      <div class="tense-num">Passé · Past · Lointain</div>
       <div class="tense-name">Plus-que-parfait</div>
       <div class="tense-hint">I had done</div>
     </button>
   </div>
 
   <div class="fam-row">
-    <div class="fam-label" style="--accent:#23446e"></div>
+    <div class="fam-label" style="--accent:#23446e">Futur · Future</div>
     <button class="tense-card" data-mode="futur" onclick="startGame('futur')">
-      <div class="tense-num">FUTURE · SIMPLE</div>
+      <div class="tense-num">Futur · Future · Simple</div>
       <div class="tense-name">Futur Simple</div>
       <div class="tense-hint">I will do</div>
     </button>
     <button class="tense-card" data-mode="futurAnterieur" onclick="startGame('futurAnterieur')">
-      <div class="tense-num">FUTURE · COMPOUND</div>
+      <div class="tense-num">Futur · Future · Composé</div>
       <div class="tense-name">Futur Antérieur</div>
       <div class="tense-hint">I will have done</div>
     </button>
   </div>
 
   <div class="fam-row">
-    <div class="fam-label" style="--accent:#542670"></div>
+    <div class="fam-label" style="--accent:#542670">Conditionnel · Conditional</div>
     <button class="tense-card" data-mode="conditionnel" onclick="startGame('conditionnel')">
-      <div class="tense-num">CONDITIONAL · PRESENT</div>
+      <div class="tense-num">Conditionnel · Conditional · Présent</div>
       <div class="tense-name">Conditionnel Présent</div>
       <div class="tense-hint">I would do</div>
     </button>
     <button class="tense-card" data-mode="conditionnelPasse" onclick="startGame('conditionnelPasse')">
-      <div class="tense-num">CONDITIONAL · PAST</div>
+      <div class="tense-num">Conditionnel · Conditional · Passé</div>
       <div class="tense-name">Conditionnel Passé</div>
       <div class="tense-hint">I would have done</div>
     </button>
   </div>
 
   <div class="fam-row">
-    <div class="fam-label" style="--accent:#c89018"></div>
+    <div class="fam-label" style="--accent:#c89018">Subjonctif · Subjunctive</div>
     <button class="tense-card" data-mode="subjonctif" onclick="startGame('subjonctif')">
-      <div class="tense-num">SUBJUNCTIVE</div>
+      <div class="tense-num">Subjonctif · Subjunctive</div>
       <div class="tense-name">Subjonctif Présent</div>
       <div class="tense-hint">(that) I do</div>
     </button>
   </div>
 
+  <div class="section-label"><span class="lbl-orn">§</span> Le grand défi de l'éditeur · The Editor's Challenge</div>
+
   <div class="tense-grid">
     <button class="tense-card" data-mode="mixed" onclick="startGame('mixed')" style="grid-column:1/-1">
-      <div class="tense-num">ALL TENSES · MIXED</div>
+      <div class="tense-num">Tous les temps · All Tenses</div>
       <div class="tense-name">Mixed Drill</div>
       <div class="tense-hint">4 verbs, 4 pronouns each, every pronoun in a random tense. The real test.</div>
     </button>
@@ -897,11 +995,11 @@ input.correct:focus,input.warning:focus,input.wrong:focus{
 
   <div class="hud">
     <div class="hud-pill"><span class="dot"></span><span id="modeLabel">—</span></div>
-    <div class="hud-pill"><strong id="progress">1/10</strong></div>
-    <div class="hud-pill">Score <strong id="score">0</strong></div>
-    <div class="hud-pill">🔥 <strong id="streak">0</strong></div>
+    <div class="hud-pill">Épreuve <strong id="progress">1/10</strong></div>
+    <div class="hud-pill">Note <strong id="score">0</strong></div>
+    <div class="hud-pill">🔥 Série <strong id="streak">0</strong></div>
     <div class="hud-spacer"></div>
-    <button class="hud-quit" onclick="restart()">←</button>
+    <button class="hud-quit" onclick="restart()">← Sommaire</button>
   </div>
 
   <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
@@ -920,6 +1018,7 @@ input.correct:focus,input.warning:focus,input.wrong:focus{
     <div class="rows" id="rows"></div>
 
     <div class="accent-bar" id="accentBar">
+      <span class="lbl">Accents</span>
       <button type="button" class="accent-key" data-ch="à">à</button>
       <button type="button" class="accent-key" data-ch="é">é</button>
       <button type="button" class="accent-key" data-ch="è">è</button>
@@ -929,9 +1028,11 @@ input.correct:focus,input.warning:focus,input.wrong:focus{
 
     <div class="actions">
       <button class="btn-primary" onclick="checkAnswers()">
-        Vérifier <span class="kbd">⏎</span>
+        Bon à tirer · Send to Press <span class="kbd">⏎</span>
       </button>
     </div>
+
+    <div class="footnote">— Le Rédacteur en chef exige que toutes les erreurs soient corrigées avant la mise sous presse · The Editor-in-Chief requires every error fixed before the presses roll —</div>
 
   </div>
 
@@ -1132,9 +1233,12 @@ function loadQuestion(){
   const rows = document.getElementById('rows');
   rows.innerHTML='';
   q.pronouns.forEach((p,index)=>{
-    const tenseTag = q.isMixed
-      ? `<div class="row-tense">${tenseNames[q.tenses[index]]}</div>`
-      : '';
+    let tenseTag = '';
+    if(q.isMixed){
+      const tc = TENSE_THEMES[q.tenses[index]].c;
+      const wash = hexToRgba(tc, 0.08);
+      tenseTag = `<div class="row-tense" style="--tense-color:${tc};--tense-wash:${wash}">${tenseNames[q.tenses[index]]}</div>`;
+    }
     rows.innerHTML += `
       <div class="row">
         <div class="pronoun-block">
@@ -1230,10 +1334,10 @@ function finish(){
 
   let msg;
   const pct = score/questions.length;
-  if(pct===1)        msg = `Magnifique. Série : ${bestStreak}.`;
-  else if(pct>=.8)   msg = `Très bien. Série : ${bestStreak}.`;
-  else if(pct>=.5)   msg = `Pas mal. Série : ${bestStreak}.`;
-  else               msg = `Courage. Série : ${bestStreak}.`;
+  if(pct===1)        msg = `Magnifique. Le numéro part à l'impression sans la moindre correction. Meilleure série : ${bestStreak}.`;
+  else if(pct>=.8)   msg = `Très bien. Le Rédacteur en chef approuve : quelques retouches mineures, puis aux rotatives. Série : ${bestStreak}.`;
+  else if(pct>=.5)   msg = `Pas mal. Les épreuves repassent au marbre — un dernier coup d'œil avant le bouclage. Série : ${bestStreak}.`;
+  else               msg = `Courage. Le bouclage est repoussé d'un jour. Demain est une autre édition. Série : ${bestStreak}.`;
   document.getElementById('finalMsg').textContent = msg;
 }
 
