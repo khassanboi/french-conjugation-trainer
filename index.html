@@ -501,41 +501,36 @@ input:focus{
   border-bottom:3px double var(--ink);
   padding-bottom:14px;
 }
-.masthead-meta{
+.masthead-row{
   display:flex;
-  gap:18px;
-  font-family:'JetBrains Mono',monospace;
-  font-size:.62rem;
-  letter-spacing:.18em;
-  text-transform:uppercase;
-  color:var(--ink-soft);
-  opacity:.75;
-  margin-top:8px;
-  padding-top:8px;
-  border-top:1px solid var(--line);
+  align-items:baseline;
+  justify-content:space-between;
+  gap:20px;
   flex-wrap:wrap;
 }
-.masthead-meta span{display:inline-flex;align-items:center;gap:6px}
-.masthead-meta .sep{opacity:.4}
-
 .tagline{
   text-align:center;
   font-family:'Cormorant Garamond',serif;
   font-style:italic;
-  font-size:.95rem;
-  color:var(--ink-soft);
-  opacity:.75;
-  margin:-8px 0 24px;
+  font-size:1.05rem;
+  color:var(--burgundy);
+  opacity:.85;
+  margin:10px 0 8px;
   letter-spacing:.02em;
 }
-.tagline::before,
-.tagline::after{
-  content:'❦';
-  margin:0 12px;
-  color:var(--burgundy);
-  opacity:.6;
-  font-size:.85rem;
+.masthead-meta{
+  text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  opacity:.7;
+  padding-top:10px;
+  border-top:1px solid var(--line);
+  user-select:none;
 }
+.masthead-meta #weatherStr{font-style:normal}
 
 .fleuron{
   text-align:center;
@@ -583,31 +578,6 @@ input:focus{
   font-size:.92rem;
   opacity:.7;
 }
-
-/* sound controls */
-.sound-controls{
-  display:flex;
-  gap:6px;
-  margin-left:8px;
-}
-.sound-btn{
-  width:34px;height:34px;
-  border-radius:50%;
-  border:1px solid var(--line);
-  background:var(--paper);
-  cursor:pointer;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  font-size:.95rem;
-  color:var(--ink-soft);
-  transition:.2s;
-  padding:0;
-  font-family:inherit;
-}
-.sound-btn:hover{border-color:var(--burgundy);color:var(--burgundy)}
-.sound-btn.on{background:var(--ink);color:var(--cream);border-color:var(--ink)}
-.sound-btn .sr{position:absolute;left:-9999px}
 
 .section-label .lbl-orn{
   color:var(--burgundy);
@@ -685,29 +655,17 @@ input:focus{
 <div class="shell">
 
 <header class="masthead">
-  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap">
+  <div class="masthead-row">
     <div class="masthead-left">
       <div class="brand">Le <span class="accent">Conjugueur</span></div>
       <div class="tag">Vol. CI · N° 4 · Édition Révisée</div>
     </div>
-    <div style="display:flex;align-items:center;gap:14px">
-      <div class="date" id="todayDate"></div>
-      <div class="sound-controls">
-        <button id="musicBtn" class="sound-btn" title="Café ambient music — currently off" aria-label="Toggle ambient music">♪</button>
-        <button id="sfxBtn" class="sound-btn on" title="Typewriter clicks — currently on" aria-label="Toggle typewriter sounds">⌨</button>
-      </div>
-    </div>
+    <div class="date" id="todayDate"></div>
   </div>
+  <div class="tagline">— All the verbs that are fit to drill —</div>
   <div class="masthead-meta">
-    <span>Établi en 2026</span>
-    <span class="sep">·</span>
-    <span>Quartier Latin, Paris</span>
-    <span class="sep">·</span>
-    <span id="weatherStr">Brumeux, 14°C, vent léger d'ouest</span>
-    <span class="sep">·</span>
-    <span>Prix : un café noir</span>
+    Établi en 2026 &nbsp;·&nbsp; Quartier Latin, Paris &nbsp;·&nbsp; <span id="weatherStr">Brumeux, 14°C, vent léger d'ouest</span> &nbsp;·&nbsp; Prix : un café noir
   </div>
-  <div class="tagline">All the verbs that are fit to drill</div>
 </header>
 
 <!-- ─── MENU ─── -->
@@ -1248,23 +1206,18 @@ const Sound = (() => {
   return { click, ding, setMusic, setSfx, get musicOn(){return musicOn}, get sfxOn(){return sfxOn} };
 })();
 
-// Wire up sound buttons
-const musicBtn = document.getElementById('musicBtn');
-const sfxBtn = document.getElementById('sfxBtn');
-
-musicBtn.addEventListener('click', () => {
-  const next = !Sound.musicOn;
-  Sound.setMusic(next);
-  musicBtn.classList.toggle('on', next);
-  musicBtn.title = `Café ambient music — currently ${next?'on':'off'}`;
-});
-sfxBtn.addEventListener('click', () => {
-  const next = !Sound.sfxOn;
-  Sound.setSfx(next);
-  sfxBtn.classList.toggle('on', next);
-  sfxBtn.title = `Typewriter clicks — currently ${next?'on':'off'}`;
-  if(next) Sound.click(); // little preview
-});
+// Auto-start ambient music a couple seconds after render.
+// Browsers block autoplay until a user gesture, so we always have a one-time
+// gesture listener as a fallback that will (re)start the music on first interaction.
+const startMusic = () => Sound.setMusic(true);
+setTimeout(startMusic, 2200);
+const gestureStart = () => {
+  startMusic();
+  document.removeEventListener('click', gestureStart);
+  document.removeEventListener('keydown', gestureStart);
+};
+document.addEventListener('click', gestureStart);
+document.addEventListener('keydown', gestureStart);
 
 // Typewriter click on every keystroke inside an answer input
 document.addEventListener('keydown', (e) => {
