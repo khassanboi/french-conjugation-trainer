@@ -263,13 +263,7 @@ body{
   filter:none;
 }
 
-.tense-num{
-  font-family:'JetBrains Mono',monospace;
-  font-size:.7rem;
-  letter-spacing:.2em;
-  color:var(--ink-soft);
-  opacity:.6;
-}
+.tense-num{display:none}
 .tense-name{
   font-family:'Cormorant Garamond',serif;
   font-size:1.85rem;
@@ -346,13 +340,27 @@ body{
   padding:38px 38px 32px;
   position:relative;
   overflow:hidden;
+  --theme:var(--burgundy);
+  --theme-wash:rgba(139,35,49,.08);
+  --theme-stripe:linear-gradient(90deg,var(--burgundy),var(--gold),var(--olive));
 }
 .stage::before{
   content:'';
   position:absolute;
-  top:0;left:0;right:0;height:5px;
-  background:linear-gradient(90deg,var(--burgundy),var(--gold),var(--olive));
+  top:0;left:0;right:0;height:6px;
+  background:var(--theme-stripe);
+  z-index:2;
 }
+/* soft theme wash in the top-left corner — mirrors the tense card vibe */
+.stage::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,var(--theme-wash) 0%, transparent 55%);
+  pointer-events:none;
+  z-index:0;
+}
+.stage > *{position:relative;z-index:1}
 .stage.flip{animation:flipIn .45s ease both}
 @keyframes flipIn{
   from{opacity:0;transform:translateY(12px)}
@@ -368,12 +376,18 @@ body{
   flex-wrap:wrap;
 }
 .tense-now{
-  font-family:'JetBrains Mono',monospace;
-  font-size:.72rem;
-  letter-spacing:.22em;
-  text-transform:uppercase;
-  color:var(--burgundy);
+  display:inline-block;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.45rem;
+  font-style:italic;
   font-weight:600;
+  color:var(--theme,var(--burgundy));
+  background:var(--theme-wash,rgba(139,35,49,.08));
+  padding:4px 14px;
+  border-radius:8px;
+  border:1.5px solid var(--theme,var(--burgundy));
+  letter-spacing:.01em;
+  margin-bottom:2px;
 }
 .verb-display{
   font-family:'Cormorant Garamond',serif;
@@ -403,8 +417,8 @@ body{
 .rows{
   display:flex;
   flex-direction:column;
-  gap:14px;
-  margin:24px 0 18px;
+  gap:32px;  /* extra gap reserves headroom for the absolute-positioned correction tag */
+  margin:32px 0 18px;
 }
 .row{
   display:grid;
@@ -437,7 +451,7 @@ body{
 .field{position:relative}
 input{
   width:100%;
-  padding:14px 16px;
+  padding:14px 46px 14px 16px;  /* extra right padding for the status icon */
   font-size:1.1rem;
   font-family:'Cormorant Garamond',serif;
   font-weight:500;
@@ -445,49 +459,80 @@ input{
   border-radius:12px;
   background:var(--cream);
   color:var(--ink);
-  transition:.2s;
+  transition:border-color .2s, background .2s, box-shadow .2s;
 }
 input:focus{
   outline:none;
-  border-color:var(--burgundy);
+  border-color:var(--theme,var(--burgundy));
   background:#fff;
-  box-shadow:0 0 0 4px rgba(139,35,49,.08);
+  box-shadow:0 0 0 4px var(--theme-wash,rgba(139,35,49,.08));
 }
-.result{
-  margin-top:8px;
-  font-size:.88rem;
-  font-weight:500;
-  padding:0;
-  min-height:0;
-  display:flex;
-  align-items:center;
-  gap:8px;
+/* Result state baked into the input itself — no layout shift */
+input.correct{
+  border-color:var(--green);
+  background:rgba(62,122,79,.08);
+  color:var(--green);
+}
+input.warning{
+  border-color:var(--amber);
+  background:rgba(184,134,11,.08);
+}
+input.wrong{
+  border-color:var(--red);
+  background:rgba(168,50,50,.08);
+  color:var(--red);
+}
+input.correct:focus,input.warning:focus,input.wrong:focus{
+  /* keep the state border when re-focusing */
+  box-shadow:0 0 0 4px rgba(0,0,0,.04);
+}
+/* Status icon sits inside the input on the right */
+.field-icon{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%) scale(.8);
+  width:22px;height:22px;
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.78rem;
+  color:#fff;
+  pointer-events:none;
   opacity:0;
-  transform:translateY(-4px);
-  transition:.25s;
+  transition:opacity .25s, transform .25s;
 }
-.result.show{opacity:1;transform:translateY(0)}
-.result .icon{
-  width:18px;height:18px;border-radius:50%;
-  display:inline-flex;align-items:center;justify-content:center;
-  font-size:.7rem;color:#fff;flex-shrink:0;
-}
-.result.correct{color:var(--green)}
-.result.correct .icon{background:var(--green)}
-.result.warning{color:var(--amber)}
-.result.warning .icon{background:var(--amber)}
-.result.wrong{color:var(--red)}
-.result.wrong .icon{background:var(--red)}
-.result .correction{
+.field-icon.show{opacity:1;transform:translateY(-50%) scale(1)}
+.field-icon.correct{background:var(--green)}
+.field-icon.warning{background:var(--amber)}
+.field-icon.wrong{background:var(--red)}
+/* Floating correction tag sits ABOVE the input, absolutely positioned —
+   does not push siblings down. */
+.field-correction{
+  position:absolute;
+  right:0;
+  top:-26px;
   font-family:'Cormorant Garamond',serif;
   font-style:italic;
   font-weight:600;
+  font-size:.95rem;
+  color:var(--red);
+  padding:2px 10px;
+  background:#fff;
+  border:1px solid var(--red);
+  border-radius:8px;
+  opacity:0;
+  transform:translateY(4px);
+  transition:.25s;
+  pointer-events:none;
+  white-space:nowrap;
+  z-index:3;
 }
-.result .hint{
+.field-correction.show{opacity:1;transform:translateY(0)}
+.field-correction.soft{
   color:var(--ink-soft);
-  opacity:.65;
-  font-weight:400;
-  font-size:.82rem;
+  border-color:var(--line);
+  background:var(--paper);
+  font-weight:500;
 }
 
 /* accent helper */
@@ -746,7 +791,6 @@ input:focus{
     </div>
     <div class="date" id="todayDate"></div>
   </div>
-  <div class="tagline">— All the verbs that are fit to drill —</div>
   <div class="masthead-meta">
     Établi en 2026 &nbsp;·&nbsp; Quartier Latin, Paris &nbsp;·&nbsp; <span id="weatherStr">Brumeux, 14°C, vent léger d'ouest</span> &nbsp;·&nbsp; Prix : un café noir
   </div>
@@ -758,11 +802,6 @@ input:focus{
   <section class="menu-hero">
     <div>
       <h1 class="hero-title">Maîtrisez la <em>conjugaison</em> française, un verbe à la fois.</h1>
-      <p class="hero-sub">
-        <span class="editorial-kicker">— De la rédaction —</span>
-        <span class="dropcap">D</span>ispatches from the front lines of French grammar. Ten verbs per round, two pronouns apiece — one singular, one plural, drawn from different persons, as the rules of polite drilling demand. The <em>Mixed Drill</em> pits four verbs against four tenses; survivors are entitled to a café crème and a knowing glance. Accents are forgiven — these are difficult times — but we shall note them all the same.
-        <span class="signoff">— signé, la Rédaction du Conjugueur</span>
-      </p>
     </div>
     <div class="hero-art" aria-hidden="true">
       <svg viewBox="0 0 200 200" fill="none">
@@ -778,10 +817,8 @@ input:focus{
 
   <div class="fleuron">❦ · ❦ · ❦</div>
 
-  <div class="section-label"><span class="lbl-orn">§</span> Today's Drills · Choose a Tense</div>
-
   <div class="fam-row">
-    <div class="fam-label" style="--accent:#5b9438">Present</div>
+    <div class="fam-label" style="--accent:#5b9438"></div>
     <button class="tense-card" data-mode="present" onclick="startGame('present')">
       <div class="tense-num">PRESENT</div>
       <div class="tense-name">Présent</div>
@@ -790,7 +827,7 @@ input:focus{
   </div>
 
   <div class="fam-row">
-    <div class="fam-label" style="--accent:#b02828">Past · light → mid → dark</div>
+    <div class="fam-label" style="--accent:#b02828"></div>
     <button class="tense-card" data-mode="passeCompose" onclick="startGame('passeCompose')">
       <div class="tense-num">PAST · RECENT</div>
       <div class="tense-name">Passé Composé</div>
@@ -809,7 +846,7 @@ input:focus{
   </div>
 
   <div class="fam-row">
-    <div class="fam-label" style="--accent:#23446e">Future</div>
+    <div class="fam-label" style="--accent:#23446e"></div>
     <button class="tense-card" data-mode="futur" onclick="startGame('futur')">
       <div class="tense-num">FUTURE · SIMPLE</div>
       <div class="tense-name">Futur Simple</div>
@@ -823,7 +860,7 @@ input:focus{
   </div>
 
   <div class="fam-row">
-    <div class="fam-label" style="--accent:#542670">Conditional</div>
+    <div class="fam-label" style="--accent:#542670"></div>
     <button class="tense-card" data-mode="conditionnel" onclick="startGame('conditionnel')">
       <div class="tense-num">CONDITIONAL · PRESENT</div>
       <div class="tense-name">Conditionnel Présent</div>
@@ -837,15 +874,13 @@ input:focus{
   </div>
 
   <div class="fam-row">
-    <div class="fam-label" style="--accent:#c89018">Subjunctive</div>
+    <div class="fam-label" style="--accent:#c89018"></div>
     <button class="tense-card" data-mode="subjonctif" onclick="startGame('subjonctif')">
       <div class="tense-num">SUBJUNCTIVE</div>
       <div class="tense-name">Subjonctif Présent</div>
       <div class="tense-hint">(that) I do</div>
     </button>
   </div>
-
-  <div class="section-label"><span class="lbl-orn">§</span> The Editor's Challenge</div>
 
   <div class="tense-grid">
     <button class="tense-card" data-mode="mixed" onclick="startGame('mixed')" style="grid-column:1/-1">
@@ -862,11 +897,11 @@ input:focus{
 
   <div class="hud">
     <div class="hud-pill"><span class="dot"></span><span id="modeLabel">—</span></div>
-    <div class="hud-pill">Question <strong id="progress">1/15</strong></div>
+    <div class="hud-pill"><strong id="progress">1/10</strong></div>
     <div class="hud-pill">Score <strong id="score">0</strong></div>
-    <div class="hud-pill">🔥 Streak <strong id="streak">0</strong></div>
+    <div class="hud-pill">🔥 <strong id="streak">0</strong></div>
     <div class="hud-spacer"></div>
-    <button class="hud-quit" onclick="restart()">← Menu</button>
+    <button class="hud-quit" onclick="restart()">←</button>
   </div>
 
   <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
@@ -885,7 +920,6 @@ input:focus{
     <div class="rows" id="rows"></div>
 
     <div class="accent-bar" id="accentBar">
-      <span class="lbl">Accents</span>
       <button type="button" class="accent-key" data-ch="à">à</button>
       <button type="button" class="accent-key" data-ch="é">é</button>
       <button type="button" class="accent-key" data-ch="è">è</button>
@@ -895,21 +929,19 @@ input:focus{
 
     <div class="actions">
       <button class="btn-primary" onclick="checkAnswers()">
-        Check Answers <span class="kbd">⏎ Enter</span>
+        Vérifier <span class="kbd">⏎</span>
       </button>
     </div>
-
-    <div class="footnote">— Every error must be amended before the press goes to print · Missing accents are admitted into the record with a polite cough —</div>
 
   </div>
 
   <div class="results" id="results">
-    <div class="results-eyebrow">— Édition Spéciale · Bilan du Jour —</div>
+    <div class="results-eyebrow">— Bilan du Jour —</div>
     <h2 class="results-title">La séance est levée.</h2>
     <div class="results-score" id="finalScore">0/10</div>
     <p class="results-msg" id="finalMsg"></p>
     <div class="fleuron" style="margin:18px 0 22px">❦</div>
-    <button class="btn-primary" onclick="restart()">Return to the Front Page</button>
+    <button class="btn-primary" onclick="restart()">Retour à la une</button>
   </div>
 
 </div>
@@ -1046,11 +1078,49 @@ function startGame(mode){
   loadQuestion();
 }
 
+// Theme color (stripe + wash) per tense — mirrors the menu cards.
+const TENSE_THEMES = {
+  present:           {c:'#5b9438'},
+  passeCompose:      {c:'#d86060'},
+  imparfait:         {c:'#b02828'},
+  plusQueParfait:    {c:'#5b1010'},
+  futur:             {c:'#5d8fbe'},
+  futurAnterieur:    {c:'#23446e'},
+  conditionnel:      {c:'#a978c0'},
+  conditionnelPasse: {c:'#542670'},
+  subjonctif:        {c:'#c89018'},
+};
+const MIXED_STRIPE = 'linear-gradient(90deg,#5b9438 0%,#c89018 22%,#b02828 50%,#23446e 76%,#542670 100%)';
+
+function hexToRgba(hex, a){
+  const h = hex.replace('#','');
+  const r = parseInt(h.substr(0,2),16),
+        g = parseInt(h.substr(2,2),16),
+        b = parseInt(h.substr(4,2),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function applyTheme(q){
+  const stage = document.getElementById('stage');
+  if(q.isMixed){
+    stage.style.setProperty('--theme', '#542670');
+    stage.style.setProperty('--theme-wash', 'rgba(84,38,112,.06)');
+    stage.style.setProperty('--theme-stripe', MIXED_STRIPE);
+  }else{
+    const c = TENSE_THEMES[q.tenses[0]].c;
+    stage.style.setProperty('--theme', c);
+    stage.style.setProperty('--theme-wash', hexToRgba(c, 0.10));
+    stage.style.setProperty('--theme-stripe', `linear-gradient(90deg, ${c}, ${c})`);
+  }
+}
+
 function loadQuestion(){
   const q = questions[current];
-  const headerLabel = q.isMixed ? 'Mixed' : tenseNames[q.tenses[0]];
+  applyTheme(q);
+
+  const headerLabel = q.isMixed ? 'Mixte' : tenseNames[q.tenses[0]];
   document.getElementById('modeLabel').textContent = headerLabel;
-  document.getElementById('tenseNow').textContent = headerLabel.toUpperCase();
+  document.getElementById('tenseNow').textContent = headerLabel;
   document.getElementById('progress').textContent = `${current+1}/${questions.length}`;
   document.getElementById('score').textContent = score;
   document.getElementById('streak').textContent = streak;
@@ -1073,7 +1143,8 @@ function loadQuestion(){
         </div>
         <div class="field">
           <input id="input${index}" autocomplete="off" spellcheck="false" placeholder="…">
-          <div class="result" id="result${index}"></div>
+          <span class="field-icon" id="icon${index}"></span>
+          <span class="field-correction" id="correction${index}"></span>
         </div>
       </div>
     `;
@@ -1095,26 +1166,40 @@ function checkAnswers(){
     const raw = data[q.verb][q.tenses[index]][pronouns.indexOf(p)];
     const alts = raw.split('|');
     const canonical = alts[0];
-    const user = document.getElementById(`input${index}`).value.trim();
-    const result = document.getElementById(`result${index}`);
-    result.classList.add('show');
+    const input = document.getElementById(`input${index}`);
+    const user = input.value.trim();
+    const icon = document.getElementById(`icon${index}`);
+    const correction = document.getElementById(`correction${index}`);
+
+    // reset state
+    input.classList.remove('correct','warning','wrong');
+    icon.classList.remove('correct','warning','wrong','show');
+    correction.classList.remove('show');
+    correction.textContent = '';
 
     const userN = normalize(user);
     const exactMatch = alts.some(a => a === user);
     const looseMatch = alts.some(a => normalize(a) === userN);
 
     if(exactMatch){
-      result.className='result correct show';
-      result.innerHTML=`<span class="icon">✓</span><span>Parfait.</span>`;
+      input.classList.add('correct');
+      icon.classList.add('correct','show');
+      icon.textContent = '✓';
     }else if(looseMatch){
-      // matched ignoring accents — count as correct, soft note in grey
+      // accent forgiven — count as correct, show the accented form as a floating tag
       const matched = alts.find(a => normalize(a) === userN);
-      result.className='result correct show';
-      result.innerHTML=`<span class="icon">✓</span><span>Correct <span class="hint">— accent: <span class="correction">${matched}</span></span></span>`;
+      input.classList.add('correct');
+      icon.classList.add('correct','show');
+      icon.textContent = '✓';
+      correction.textContent = matched;
+      correction.classList.add('show','soft');
     }else{
       allCorrect = false;
-      result.className='result wrong show';
-      result.innerHTML=`<span class="icon">✕</span><span>Correct answer — <span class="correction">${canonical}</span></span>`;
+      input.classList.add('wrong');
+      icon.classList.add('wrong','show');
+      icon.textContent = '✕';
+      correction.textContent = canonical;
+      correction.classList.add('show');
     }
   });
 
@@ -1145,10 +1230,10 @@ function finish(){
 
   let msg;
   const pct = score/questions.length;
-  if(pct===1)        msg = `Magnifique. The Académie française tips its bicorne. The presses stop in your honour. Best streak: ${bestStreak}.`;
-  else if(pct>=.8)   msg = `Très bien. The editor nods over his espresso. A few smudges, nothing the printer can't tidy. Best streak: ${bestStreak}.`;
-  else if(pct>=.5)   msg = `Pas mal. Some verbs went to press with typos — the corrections column awaits tomorrow. Best streak: ${bestStreak}.`;
-  else               msg = `Courage. Even Flaubert tore up drafts. Another edition, another chance. Best streak: ${bestStreak}.`;
+  if(pct===1)        msg = `Magnifique. Série : ${bestStreak}.`;
+  else if(pct>=.8)   msg = `Très bien. Série : ${bestStreak}.`;
+  else if(pct>=.5)   msg = `Pas mal. Série : ${bestStreak}.`;
+  else               msg = `Courage. Série : ${bestStreak}.`;
   document.getElementById('finalMsg').textContent = msg;
 }
 
@@ -1240,7 +1325,7 @@ const Sound = (() => {
     ctx = new AC();
     masterGain = ctx.createGain(); masterGain.gain.value = 1; masterGain.connect(ctx.destination);
     musicGain = ctx.createGain(); musicGain.gain.value = 0.18; musicGain.connect(masterGain);
-    sfxGain = ctx.createGain(); sfxGain.gain.value = 0.35; sfxGain.connect(masterGain);
+    sfxGain = ctx.createGain(); sfxGain.gain.value = 0.85; sfxGain.connect(masterGain);
   }
 
   // Typewriter click: short filtered noise burst
@@ -1258,8 +1343,8 @@ const Sound = (() => {
     bp.Q.value = 4;
     const g = ctx.createGain();
     g.gain.setValueAtTime(0.0001, t);
-    g.gain.exponentialRampToValueAtTime(0.6, t+0.002);
-    g.gain.exponentialRampToValueAtTime(0.0001, t+0.05);
+    g.gain.exponentialRampToValueAtTime(0.9, t+0.002);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+0.06);
     src.connect(bp).connect(g).connect(sfxGain);
     src.start(t); src.stop(t+0.06);
   }
@@ -1369,6 +1454,22 @@ document.addEventListener('keydown', (e) => {
     Sound.click();
   }else if(e.key === 'Backspace' && e.target && e.target.tagName === 'INPUT'){
     Sound.click();
+  }
+});
+
+// Clear inline error/correct state the moment user edits the input again
+document.addEventListener('input', (e) => {
+  const t = e.target;
+  if(t.tagName !== 'INPUT' || !t.closest('.rows')) return;
+  if(t.classList.contains('correct') || t.classList.contains('warning') || t.classList.contains('wrong')){
+    t.classList.remove('correct','warning','wrong');
+    const m = t.id.match(/^input(\d+)$/);
+    if(m){
+      const icon = document.getElementById('icon'+m[1]);
+      const correction = document.getElementById('correction'+m[1]);
+      if(icon){ icon.classList.remove('show','correct','warning','wrong'); icon.textContent=''; }
+      if(correction){ correction.classList.remove('show','soft'); correction.textContent=''; }
+    }
   }
 });
 
