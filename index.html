@@ -443,15 +443,29 @@ input:focus{
 .accent-key{
   background:#fff;
   border:1px solid var(--line);
-  border-radius:8px;
-  padding:6px 12px;
+  border-radius:10px;
+  padding:10px 18px;
   font-family:'Cormorant Garamond',serif;
-  font-size:1.05rem;
+  font-size:1.6rem;
+  font-weight:500;
+  line-height:1;
   cursor:pointer;
   transition:.15s;
-  min-width:34px;
+  min-width:54px;
+  color:var(--ink);
 }
-.accent-key:hover{background:var(--gold-soft);border-color:var(--gold)}
+.accent-key:hover:not(:disabled){
+  background:var(--gold-soft);
+  border-color:var(--gold);
+  transform:translateY(-1px);
+}
+.accent-key:disabled{
+  opacity:.35;
+  cursor:not-allowed;
+  background:transparent;
+}
+.accent-bar{transition:opacity .2s}
+.accent-bar.dim{opacity:.55}
 
 .actions{
   display:flex;
@@ -783,19 +797,12 @@ input:focus{
 
     <div class="rows" id="rows"></div>
 
-    <div class="accent-bar">
+    <div class="accent-bar" id="accentBar">
       <span class="lbl">Accents</span>
+      <button type="button" class="accent-key" data-ch="à">à</button>
       <button type="button" class="accent-key" data-ch="é">é</button>
       <button type="button" class="accent-key" data-ch="è">è</button>
       <button type="button" class="accent-key" data-ch="ê">ê</button>
-      <button type="button" class="accent-key" data-ch="ë">ë</button>
-      <button type="button" class="accent-key" data-ch="à">à</button>
-      <button type="button" class="accent-key" data-ch="â">â</button>
-      <button type="button" class="accent-key" data-ch="î">î</button>
-      <button type="button" class="accent-key" data-ch="ï">ï</button>
-      <button type="button" class="accent-key" data-ch="ô">ô</button>
-      <button type="button" class="accent-key" data-ch="ù">ù</button>
-      <button type="button" class="accent-key" data-ch="û">û</button>
       <button type="button" class="accent-key" data-ch="ç">ç</button>
     </div>
 
@@ -1068,19 +1075,63 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-// accent helper
-document.addEventListener('click',e=>{
-  const k = e.target.closest('.accent-key');
-  if(!k) return;
-  const ch = k.dataset.ch;
-  const active = document.activeElement;
-  if(active && active.tagName==='INPUT'){
-    const start=active.selectionStart, end=active.selectionEnd;
-    active.value = active.value.slice(0,start) + ch + active.value.slice(end);
-    active.selectionStart = active.selectionEnd = start+1;
-    active.focus();
+// ─── Accent helper ────────────────────────────────────────────────
+// Keys are only usable when an answer input has focus. We:
+//   1. Track the currently-focused input so we know where to insert.
+//   2. Prevent buttons from stealing focus (mousedown preventDefault).
+//   3. Disable the keys (visually + functionally) when no input is focused.
+let _focusedInput = null;
+
+document.addEventListener('focusin', e => {
+  if(e.target.tagName === 'INPUT' && e.target.closest('.rows')){
+    _focusedInput = e.target;
+    updateAccentBar();
   }
 });
+document.addEventListener('focusout', e => {
+  if(e.target === _focusedInput){
+    // Defer: focus might move to another input or to an accent key (which we'll cancel)
+    setTimeout(() => {
+      const active = document.activeElement;
+      if(!active || active.tagName !== 'INPUT' || !active.closest('.rows')){
+        _focusedInput = null;
+        updateAccentBar();
+      }
+    }, 0);
+  }
+});
+
+function updateAccentBar(){
+  const bar = document.getElementById('accentBar');
+  if(!bar) return;
+  const enabled = !!_focusedInput;
+  bar.classList.toggle('dim', !enabled);
+  bar.querySelectorAll('.accent-key').forEach(b => { b.disabled = !enabled; });
+}
+
+// Prevent accent buttons from stealing focus from the input on click
+document.addEventListener('mousedown', e => {
+  const k = e.target.closest('.accent-key');
+  if(k) e.preventDefault();
+});
+
+document.addEventListener('click', e => {
+  const k = e.target.closest('.accent-key');
+  if(!k || k.disabled) return;
+  const input = _focusedInput;
+  if(!input) return;
+  const ch = k.dataset.ch;
+  const start = input.selectionStart, end = input.selectionEnd;
+  input.value = input.value.slice(0,start) + ch + input.value.slice(end);
+  input.selectionStart = input.selectionEnd = start + ch.length;
+  input.focus();
+  // Mimic a keystroke for the typewriter SFX
+  if(typeof Sound !== 'undefined') Sound.click();
+});
+
+// Initialize the bar as disabled (no input is focused yet)
+document.addEventListener('DOMContentLoaded', updateAccentBar);
+updateAccentBar();
 
 /* ─────────────────────────────────────────────────────────────────
    AUDIO — typewriter clicks + Parisian café ambient piano
