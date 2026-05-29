@@ -1323,6 +1323,7 @@ function checkAnswers(){
   }else{
     streak = 0;
     document.getElementById('streak').textContent = streak;
+    if(typeof Sound!=='undefined') Sound.buzz();
   }
 }
 
@@ -1469,6 +1470,26 @@ const Sound = (() => {
     });
   }
 
+  // "Buzz" — error sound. Low dissonant two-tone with quick fall, like an editor's red pen.
+  function buzz(){
+    if(!sfxOn) return;
+    ensure(); if(!ctx) return;
+    const t = ctx.currentTime;
+    // Two detuned low square-ish oscillators going from A2 down to E2 — a brief downward buzz
+    [{f:220, t:'sawtooth'}, {f:165, t:'sawtooth'}].forEach((cfg,i)=>{
+      const o = ctx.createOscillator(); o.type = cfg.t;
+      o.frequency.setValueAtTime(cfg.f, t);
+      o.frequency.exponentialRampToValueAtTime(cfg.f*0.6, t+0.28);
+      const lp = ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=900;
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.22, t+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+0.32);
+      o.connect(lp).connect(g).connect(sfxGain);
+      o.start(t); o.stop(t+0.35);
+    });
+  }
+
   // Ambient music: jazz-cafe chord progression, slow arpeggios on soft piano-ish tones
   // Progression in Dm: Dm7 - G7 - Cmaj7 - Am7 (ii-V-I-vi)
   const PROG = [
@@ -1537,7 +1558,7 @@ const Sound = (() => {
     if(musicTimer){ clearTimeout(musicTimer); musicTimer = null; }
   }
 
-  return { click, ding, setMusic, setSfx, resetProgression,
+  return { click, ding, buzz, setMusic, setSfx, resetProgression,
            get musicOn(){return musicOn}, get sfxOn(){return sfxOn} };
 })();
 
