@@ -596,47 +596,47 @@ input:focus{
     <button class="tense-card" data-mode="present" onclick="startGame('present')">
       <div class="tense-num">01 · INDICATIF</div>
       <div class="tense-name">Présent</div>
-      <div class="tense-hint">The everyday now — start here.</div>
+      <div class="tense-hint">I do · I am doing</div>
     </button>
     <button class="tense-card" data-mode="passeCompose" onclick="startGame('passeCompose')">
       <div class="tense-num">02 · INDICATIF</div>
       <div class="tense-name">Passé Composé</div>
-      <div class="tense-hint">Completed past action.</div>
+      <div class="tense-hint">I did · I have done</div>
     </button>
     <button class="tense-card" data-mode="imparfait" onclick="startGame('imparfait')">
       <div class="tense-num">03 · INDICATIF</div>
       <div class="tense-name">Imparfait</div>
-      <div class="tense-hint">Ongoing or habitual past.</div>
+      <div class="tense-hint">I was doing · I used to do</div>
     </button>
     <button class="tense-card" data-mode="plusQueParfait" onclick="startGame('plusQueParfait')">
       <div class="tense-num">04 · INDICATIF</div>
       <div class="tense-name">Plus-que-parfait</div>
-      <div class="tense-hint">Past before another past.</div>
+      <div class="tense-hint">I had done</div>
     </button>
     <button class="tense-card" data-mode="futur" onclick="startGame('futur')">
       <div class="tense-num">05 · INDICATIF</div>
-      <div class="tense-name">Futur</div>
-      <div class="tense-hint">What will come to pass.</div>
+      <div class="tense-name">Futur Simple</div>
+      <div class="tense-hint">I will do</div>
     </button>
     <button class="tense-card" data-mode="futurAnterieur" onclick="startGame('futurAnterieur')">
       <div class="tense-num">06 · INDICATIF</div>
       <div class="tense-name">Futur Antérieur</div>
-      <div class="tense-hint">Will have done — completed future.</div>
+      <div class="tense-hint">I will have done</div>
     </button>
     <button class="tense-card" data-mode="conditionnel" onclick="startGame('conditionnel')">
       <div class="tense-num">07 · MODE</div>
-      <div class="tense-name">Conditionnel</div>
-      <div class="tense-hint">Would, could, politeness.</div>
+      <div class="tense-name">Conditionnel Présent</div>
+      <div class="tense-hint">I would do</div>
     </button>
     <button class="tense-card" data-mode="conditionnelPasse" onclick="startGame('conditionnelPasse')">
       <div class="tense-num">08 · MODE</div>
       <div class="tense-name">Conditionnel Passé</div>
-      <div class="tense-hint">Would have — past unreal.</div>
+      <div class="tense-hint">I would have done</div>
     </button>
     <button class="tense-card" data-mode="subjonctif" onclick="startGame('subjonctif')">
       <div class="tense-num">09 · MODE</div>
-      <div class="tense-name">Subjonctif</div>
-      <div class="tense-hint">Doubt, desire, emotion.</div>
+      <div class="tense-name">Subjonctif Présent</div>
+      <div class="tense-hint">(that) I do</div>
     </button>
   </div>
 
@@ -762,11 +762,11 @@ const tenseNames = {
   passeCompose:'Passé Composé',
   imparfait:'Imparfait',
   plusQueParfait:'Plus-que-parfait',
-  futur:'Futur',
+  futur:'Futur Simple',
   futurAnterieur:'Futur Antérieur',
-  conditionnel:'Conditionnel',
+  conditionnel:'Conditionnel Présent',
   conditionnelPasse:'Conditionnel Passé',
-  subjonctif:'Subjonctif'
+  subjonctif:'Subjonctif Présent'
 };
 
 const ALL_TENSES = ['present','passeCompose','imparfait','plusQueParfait','futur','futurAnterieur','conditionnel','conditionnelPasse','subjonctif'];
