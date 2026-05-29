@@ -145,9 +145,15 @@ body{
 
 .tense-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  grid-template-columns:repeat(3,1fr);
   gap:14px;
   margin-bottom:14px;
+}
+@media(max-width:760px){
+  .tense-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:480px){
+  .tense-grid{grid-template-columns:1fr}
 }
 
 .tense-card{
@@ -643,7 +649,7 @@ input:focus{
   <div class="section-label">Or take the full challenge</div>
 
   <div class="tense-grid">
-    <button class="tense-card" data-mode="mixed" onclick="startGame('mixed')" style="grid-column:span 2">
+    <button class="tense-card" data-mode="mixed" onclick="startGame('mixed')" style="grid-column:1/-1">
       <div class="tense-num">∞ · ALL TENSES</div>
       <div class="tense-name">Mixed Drill</div>
       <div class="tense-hint">4 verbs, 4 pronouns each, every pronoun in a random tense. The real test.</div>
