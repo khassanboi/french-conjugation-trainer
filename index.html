@@ -190,11 +190,30 @@ body{
 .tense-card[data-mode="conditionnel"]    {--c1:#e0c8e8}  /* cond. — light lavender */
 .tense-card[data-mode="conditionnelPasse"]{--c1:#ad88bc} /* cond. — deeper mauve */
 .tense-card[data-mode="subjonctif"]      {--c1:#f5d878}  /* subj. — warm yellow */
-.tense-card[data-mode="mixed"]{--c1:#1a1f2e;color:#fbf7ef}
+.tense-card[data-mode="mixed"]{
+  background:#16192a;
+  color:#fbf7ef;
+  border-color:rgba(251,247,239,.18);
+}
 .tense-card[data-mode="mixed"] .tense-name,
 .tense-card[data-mode="mixed"] .tense-num,
-.tense-card[data-mode="mixed"] .tense-hint{color:#fbf7ef}
-.tense-card[data-mode="mixed"]::before{background:linear-gradient(135deg,#3a2a4a 0%,transparent 70%);opacity:.7}
+.tense-card[data-mode="mixed"] .tense-hint{color:#fbf7ef;position:relative;z-index:1}
+.tense-card[data-mode="mixed"]::before{
+  /* Aurora of all five tense-family colors, blended onto an ink base */
+  background:
+    radial-gradient(circle at  8% 18%, rgba(188,220,160,.62), transparent 42%),  /* green  · present */
+    radial-gradient(circle at 92% 14%, rgba(245,216,120,.58), transparent 42%),  /* yellow · subjunctive */
+    radial-gradient(circle at 96% 88%, rgba(136,168,200,.60), transparent 44%),  /* blue   · future */
+    radial-gradient(circle at  6% 90%, rgba(216,128,128,.62), transparent 44%),  /* red    · past */
+    radial-gradient(circle at 52% 55%, rgba(173,136,188,.45), transparent 55%);  /* mauve  · conditional */
+  mix-blend-mode:screen;
+  opacity:1;
+  filter:saturate(1.1);
+}
+.tense-card[data-mode="mixed"]:hover{
+  box-shadow:0 18px 50px -18px rgba(173,136,188,.55), 0 0 0 1px rgba(251,247,239,.25);
+  border-color:rgba(251,247,239,.3);
+}
 
 .tense-num{
   font-family:'JetBrains Mono',monospace;
